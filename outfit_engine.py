@@ -8,6 +8,11 @@ Ablauf (siehe Algorithmusbeschreibung):
 5. Jede Kombination erhält einen Kompatibilitätswert (0-100), gewichtet
    Season (50) > Occasion (30) > Color (20).
 6. Ausgegeben wird ein Outfit; bei Gleichstand entscheidet der Zufall.
+
+Zwei Erweiterungen:
+- Ohne Ausgangsteil (anchor_id=None) wählt die Engine alle Teile selbst, nur aus Season und Occasion.
+- Edgy-Modus (edgy=True): komplette Inversion. Die harten Filter entfallen, jede Bewertung
+  wird umgedreht (1 - Wert). Ergebnis ist das unpassendste Outfit, z. B. Sandalen im Winter.
 """
 
 import itertools
@@ -21,6 +26,7 @@ SLOTS = ["Footwear", "Socks", "Bottom", "Top", "Outerwear"]
 WEIGHTS = {"season": 50, "occasion": 30, "color": 20}
 
 TOP_PER_SLOT = 8       # nur die besten Kandidaten je Slot werden kombiniert (Performance)
+TOP_PER_SLOT_NO_ANCHOR = 6   # ohne Ausgangsteil sind es mehr Slots mit freier Wahl
 TIE_TOLERANCE = 3.0    # Outfits innerhalb dieser Punkte zum Besten gelten als gleich gut
 
 
@@ -84,6 +90,7 @@ class Outfit:
     occasion: float
     color: float
     warnings: list = field(default_factory=list)
+    edgy: bool = False          # True: Teilwerte und Score sind invertiert (je höher, desto unpassender)
 
     @property
     def key(self):
@@ -96,74 +103,95 @@ class Outfit:
         for slot, item in self.slots.items():
             text = f"{item['Name']} ({item['Clothing_ID']})" if item else "- no suitable item in wardrobe"
             lines.append(f"{slot:<10} {text}")
-        lines.append(f"Score      {self.score:.0f}/100  "
+        label = "Edginess" if self.edgy else "Score"
+        lines.append(f"{label:<10} {self.score:.0f}/100  "
                      f"(season {self.season:.2f}, occasion {self.occasion:.2f}, color {self.color:.2f})")
         lines.extend(f"Note       {w}" for w in self.warnings)
         return "\n".join(lines)
 
 
-def _score_outfit(slots, chosen, season, occasion):
+def _score_outfit(slots, chosen, season, occasion, edgy=False):
     items = list(chosen.values())
     s = sum(season_fit(i, season) for i in items) / len(items)
     o = sum(occasion_fit(i, occasion) for i in items) / len(items)
     c = _outfit_color_harmony(items)
+    if edgy:
+        s, o, c = 1 - s, 1 - o, 1 - c
     score = WEIGHTS["season"] * s + WEIGHTS["occasion"] * o + WEIGHTS["color"] * c
-    return Outfit({slot: chosen.get(slot) for slot in slots}, score, s, o, c)
+    return Outfit({slot: chosen.get(slot) for slot in slots}, score, s, o, c, edgy=edgy)
 
 
-def _candidates(wardrobe, slot, anchor, season, occasion):
-    """Passende Teile für einen Slot, beste zuerst, höchstens TOP_PER_SLOT."""
-    fitting = [i for i in wardrobe
-               if i["Category"] == slot and i["Clothing_ID"] != anchor["Clothing_ID"]
-               and season in i["Season"] and occasion in i["Occasion"]]
+def _candidates(wardrobe, slot, anchor, season, occasion, edgy, rng, limit):
+    """Kandidaten für einen Slot, beste zuerst, höchstens limit.
+
+    Normal: nur Teile, die zu Season UND Occasion passen. Edgy: alle Teile, die unpassendsten zuerst.
+    Ohne Ausgangsteil (anchor None) zählt nur Season und Occasion. Bei gleicher Bewertung
+    entscheidet der Zufall, damit nicht immer dieselben Teile (niedrigste IDs) vorn liegen.
+    """
+    pool = [i for i in wardrobe
+            if i["Category"] == slot and (anchor is None or i["Clothing_ID"] != anchor["Clothing_ID"])]
+    if not edgy:
+        pool = [i for i in pool if season in i["Season"] and occasion in i["Occasion"]]
 
     def rating(item):
-        return (WEIGHTS["season"] * season_fit(item, season)
-                + WEIGHTS["occasion"] * occasion_fit(item, occasion)
-                + WEIGHTS["color"] * color_harmony(item["Color"], anchor["Color"]))
+        r = (WEIGHTS["season"] * season_fit(item, season)
+             + WEIGHTS["occasion"] * occasion_fit(item, occasion))
+        if anchor is not None:
+            r += WEIGHTS["color"] * color_harmony(item["Color"], anchor["Color"])
+        return -r if edgy else r
 
-    fitting.sort(key=lambda i: (-rating(i), i["Clothing_ID"]))
-    return fitting[:TOP_PER_SLOT]
+    pool.sort(key=lambda i: (-rating(i), rng.random()))
+    return pool[:limit]
 
 
 # --- Hauptfunktion ------------------------------------------------------------------
 
-def suggest_outfit(wardrobe, anchor_id, season, occasion, *, exclude=(), rng=None):
-    """Erstellt einen Outfitvorschlag rund um das Teil anchor_id.
+def suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude=(), rng=None):
+    """Erstellt einen Outfitvorschlag, optional rund um das Teil anchor_id.
 
-    exclude: Outfit-Keys (Outfit.key) bereits gezeigter Outfits, für 'anderes Outfit'.
-    rng:     optionaler random.Random für reproduzierbare Ergebnisse (Tests).
+    anchor_id: Ausgangsteil, oder None, dann wählt die Engine alle Teile selbst.
+    edgy:      True kehrt die Bewertung komplett um und lässt die harten Filter weg
+               (das unpassendste Outfit). Funktioniert mit und ohne Ausgangsteil.
+    exclude:   Outfit-Keys (Outfit.key) bereits gezeigter Outfits, für 'anderes Outfit'.
+    rng:       optionaler random.Random für reproduzierbare Ergebnisse (Tests).
     Fehlt für einen Slot ein passendes Teil, bleibt der Slot None.
-    Wirft ValueError bei unbekannter ID, Season oder Occasion.
+    Wirft ValueError bei unbekannter ID, Season oder Occasion oder wenn gar kein Teil passt.
     """
     if season not in SEASONS:
         raise ValueError(f"Unknown season '{season}'. Allowed: {', '.join(SEASONS)}.")
     if occasion not in OCCASIONS:
         raise ValueError(f"Unknown occasion '{occasion}'. Allowed: {', '.join(OCCASIONS)}.")
-    anchor = next((i for i in wardrobe if i["Clothing_ID"] == anchor_id), None)
-    if anchor is None:
-        raise ValueError(f"Unknown Clothing_ID '{anchor_id}'.")
+    rng = rng or random
+    anchor = None
+    if anchor_id is not None:
+        anchor = next((i for i in wardrobe if i["Clothing_ID"] == anchor_id), None)
+        if anchor is None:
+            raise ValueError(f"Unknown Clothing_ID '{anchor_id}'.")
 
     warnings = []
-    if season not in anchor["Season"]:
-        warnings.append(f"{anchor['Name']} is not meant for {season}.")
-    if occasion not in anchor["Occasion"]:
-        warnings.append(f"{anchor['Name']} is not meant for {occasion}.")
+    if anchor is not None and not edgy:
+        if season not in anchor["Season"]:
+            warnings.append(f"{anchor['Name']} is not meant for {season}.")
+        if occasion not in anchor["Occasion"]:
+            warnings.append(f"{anchor['Name']} is not meant for {occasion}.")
 
     # Ist das Ausgangsteil eine Kopfbedeckung, wird sie zusätzlich ausgegeben.
-    slots = (["Headwear"] if anchor["Category"] == "Headwear" else []) + SLOTS
+    slots = (["Headwear"] if anchor and anchor["Category"] == "Headwear" else []) + SLOTS
+    limit = TOP_PER_SLOT if anchor else TOP_PER_SLOT_NO_ANCHOR
 
     candidates = {}
     for slot in slots:
-        if slot == anchor["Category"]:
+        if anchor and slot == anchor["Category"]:
             candidates[slot] = [anchor]
         else:
-            candidates[slot] = _candidates(wardrobe, slot, anchor, season, occasion)
+            candidates[slot] = _candidates(wardrobe, slot, anchor, season, occasion, edgy, rng, limit)
 
     filled = [s for s in slots if candidates[s]]
+    if not filled:
+        raise ValueError("No suitable items in the wardrobe.")
     outfits = []
     for combo in itertools.product(*(candidates[s] for s in filled)):
-        outfit = _score_outfit(slots, dict(zip(filled, combo)), season, occasion)
+        outfit = _score_outfit(slots, dict(zip(filled, combo)), season, occasion, edgy)
         outfit.warnings = warnings
         outfits.append(outfit)
 
@@ -171,7 +199,7 @@ def suggest_outfit(wardrobe, anchor_id, season, occasion, *, exclude=(), rng=Non
     pool = [o for o in outfits if o.key not in excluded] or outfits
     best = max(o.score for o in pool)
     top = [o for o in pool if o.score >= best - TIE_TOLERANCE]
-    return (rng or random).choice(top)
+    return rng.choice(top)
 
 
 # --- Kommandozeilen-Test ---------------------------------------------------------------
@@ -180,11 +208,12 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Outfit suggestion from the command line (for testing).")
-    parser.add_argument("clothing_id", help="e.g. C016")
     parser.add_argument("season", choices=SEASONS)
     parser.add_argument("occasion", choices=OCCASIONS)
+    parser.add_argument("--anchor", metavar="ID", help="starting item, e.g. C016 (default: none)")
+    parser.add_argument("--edgy", action="store_true", help="invert the rating: least fitting outfit")
     args = parser.parse_args()
     try:
-        print(suggest_outfit(load_wardrobe(), args.clothing_id, args.season, args.occasion).format())
+        print(suggest_outfit(load_wardrobe(), args.anchor, args.season, args.occasion, edgy=args.edgy).format())
     except (ClothingDataError, ValueError) as e:
         parser.exit(1, f"Error: {e}\n")
