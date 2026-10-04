@@ -17,13 +17,14 @@ Zwei Erweiterungen:
 
 import itertools
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from wardrobe import (COLOR_HUES, NEUTRAL_COLORS, OCCASIONS, SEASONS,
                       ClothingDataError, load_wardrobe)
 
 SLOTS = ["Footwear", "Socks", "Bottom", "Top", "Outerwear"]
 WEIGHTS = {"season": 50, "occasion": 30, "color": 20}
+SUIT_BONUS = 5         # Suit Jacket + Trousers in derselben Farbe ergeben einen Anzug
 
 TOP_PER_SLOT = 8       # nur die besten Kandidaten je Slot werden kombiniert (Performance)
 TOP_PER_SLOT_NO_ANCHOR = 6   # ohne Ausgangsteil sind es mehr Slots mit freier Wahl
@@ -89,8 +90,8 @@ class Outfit:
     season: float               # Teilwerte 0-1 (Durchschnitt bzw. Farbharmonie)
     occasion: float
     color: float
-    warnings: list = field(default_factory=list)
     edgy: bool = False          # True: Teilwerte und Score sind invertiert (je höher, desto unpassender)
+    suit: bool = False          # True: Suit Jacket und Trousers in derselben Farbe (Anzug)
 
     @property
     def key(self):
@@ -105,9 +106,16 @@ class Outfit:
             lines.append(f"{slot:<10} {text}")
         label = "Edginess" if self.edgy else "Score"
         lines.append(f"{label:<10} {self.score:.0f}/100  "
-                     f"(season {self.season:.2f}, occasion {self.occasion:.2f}, color {self.color:.2f})")
-        lines.extend(f"Note       {w}" for w in self.warnings)
+                     f"(season {self.season:.2f}, occasion {self.occasion:.2f}, color {self.color:.2f})"
+                     + ("  suit" if self.suit else ""))
         return "\n".join(lines)
+
+
+def is_suit(chosen):
+    """True, wenn Suit Jacket und Trousers dieselbe Farbe haben (ein Anzug)."""
+    jacket, bottom = chosen.get("Outerwear"), chosen.get("Bottom")
+    return bool(jacket and bottom and jacket["Subcategory"] == "Suit Jacket"
+                and bottom["Subcategory"] == "Trousers" and jacket["Color"] == bottom["Color"])
 
 
 def _score_outfit(slots, chosen, season, occasion, edgy=False):
@@ -118,7 +126,10 @@ def _score_outfit(slots, chosen, season, occasion, edgy=False):
     if edgy:
         s, o, c = 1 - s, 1 - o, 1 - c
     score = WEIGHTS["season"] * s + WEIGHTS["occasion"] * o + WEIGHTS["color"] * c
-    return Outfit({slot: chosen.get(slot) for slot in slots}, score, s, o, c, edgy=edgy)
+    suit = is_suit(chosen)
+    if suit:  # Bonus für einen Anzug; im Edgy-Modus ist ein Anzug "zu passend" und kostet Punkte
+        score = max(0.0, min(100.0, score + (-SUIT_BONUS if edgy else SUIT_BONUS)))
+    return Outfit({slot: chosen.get(slot) for slot in slots}, score, s, o, c, edgy=edgy, suit=suit)
 
 
 def _candidates(wardrobe, slot, anchor, season, occasion, edgy, rng, limit):
@@ -149,7 +160,9 @@ def _candidates(wardrobe, slot, anchor, season, occasion, edgy, rng, limit):
 def suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude=(), rng=None):
     """Erstellt einen Outfitvorschlag, optional rund um das Teil anchor_id.
 
-    anchor_id: Ausgangsteil, oder None, dann wählt die Engine alle Teile selbst.
+    anchor_id: Ausgangsteil, oder None, dann wählt die Engine alle Teile selbst. Das Ausgangsteil
+               ist immer gesetzt, auch wenn es nicht zu Season/Occasion passt; nur die übrigen
+               Teile müssen passen.
     edgy:      True kehrt die Bewertung komplett um und lässt die harten Filter weg
                (das unpassendste Outfit). Funktioniert mit und ohne Ausgangsteil.
     exclude:   Outfit-Keys (Outfit.key) bereits gezeigter Outfits, für 'anderes Outfit'.
@@ -168,13 +181,6 @@ def suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude
         if anchor is None:
             raise ValueError(f"Unknown Clothing_ID '{anchor_id}'.")
 
-    warnings = []
-    if anchor is not None and not edgy:
-        if season not in anchor["Season"]:
-            warnings.append(f"{anchor['Name']} is not meant for {season}.")
-        if occasion not in anchor["Occasion"]:
-            warnings.append(f"{anchor['Name']} is not meant for {occasion}.")
-
     # Ist das Ausgangsteil eine Kopfbedeckung, wird sie zusätzlich ausgegeben.
     slots = (["Headwear"] if anchor and anchor["Category"] == "Headwear" else []) + SLOTS
     limit = TOP_PER_SLOT if anchor else TOP_PER_SLOT_NO_ANCHOR
@@ -191,9 +197,7 @@ def suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude
         raise ValueError("No suitable items in the wardrobe.")
     outfits = []
     for combo in itertools.product(*(candidates[s] for s in filled)):
-        outfit = _score_outfit(slots, dict(zip(filled, combo)), season, occasion, edgy)
-        outfit.warnings = warnings
-        outfits.append(outfit)
+        outfits.append(_score_outfit(slots, dict(zip(filled, combo)), season, occasion, edgy))
 
     excluded = set(exclude)
     pool = [o for o in outfits if o.key not in excluded] or outfits

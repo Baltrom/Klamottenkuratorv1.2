@@ -31,7 +31,7 @@ def window(tmp_path, monkeypatch):
 def test_first_start_copies_dataset_and_shows_items(window, tmp_path):
     w, _ = window
     assert (tmp_path / "clothing_curator_dataset.json").exists()
-    assert len(w.wardrobe) == 55
+    assert len(w.wardrobe) == 57
 
 
 def test_create_save_and_delete_outfit(window, tmp_path):
@@ -53,4 +53,6 @@ def test_edgy_and_anchor(window):
     w.create_outfit(new=True)
     assert w.current[0].edgy
     w.outfit_from(w.wardrobe[0])
-    assert w.anchor_box.currentData() == w.wardrobe[0]["Clothing_ID"]
+    assert w.anchor_id == w.wardrobe[0]["Clothing_ID"]
+    w.select_anchor(None)
+    assert w.anchor_id is None

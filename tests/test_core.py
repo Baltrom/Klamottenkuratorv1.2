@@ -86,3 +86,22 @@ def test_broken_saved_file(tmp_path):
     p.write_text("{not json", encoding="utf-8")
     with pytest.raises(so.SavedOutfitError):
         so.load_saved(p)
+
+
+def test_anchor_is_always_used_without_warning(data):
+    items, _ = data
+    # C008 White Tank Top: nur Summer, Casual/Sport
+    outfit = engine.suggest_outfit(items, "C008", "Winter", "Formal", rng=random.Random(3))
+    assert outfit.slots["Top"]["Clothing_ID"] == "C008"
+    assert not hasattr(outfit, "warnings")
+    others = [i for s, i in outfit.slots.items() if i and s != "Top"]
+    assert others and all("Winter" in i["Season"] and "Formal" in i["Occasion"] for i in others)
+
+
+def test_suit_bonus(data):
+    items, _ = data
+    outfit = engine.suggest_outfit(items, "C056", "Autumn", "Formal", rng=random.Random(4))
+    assert outfit.slots["Outerwear"]["Clothing_ID"] == "C056"
+    assert outfit.slots["Bottom"]["Subcategory"] == "Trousers" and outfit.suit
+    edgy = engine.suggest_outfit(items, "C056", "Autumn", "Formal", edgy=True, rng=random.Random(4))
+    assert not edgy.suit

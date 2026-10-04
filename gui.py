@@ -3,17 +3,18 @@
 Seiten: Home, My Wardrobe (Teile ansehen, hinzufügen, bearbeiten, löschen),
 Outfits (Outfit erstellen, speichern, gespeicherte Outfits ansehen).
 Alle Begriffe in der Oberfläche sind Englisch und stammen aus den JSON-Attributen.
-Rein textbasiert, keine Bilder. Start: py gui.py
+Keine Fotos, nur Pixelart-Icons aus icons.py. Start: py gui.py
 """
 
 import sys
+import textwrap
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont
-from PySide6.QtWidgets import (QApplication, QButtonGroup, QComboBox, QDialog, QFrame,
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QFont, QIcon
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QDialog, QFrame,
                                QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMenu,
                                QMessageBox, QPushButton, QScrollArea, QStackedWidget,
-                               QVBoxLayout, QWidget)
+                               QToolButton, QVBoxLayout, QWidget)
 
 import icons
 import saved_outfits as so
@@ -23,7 +24,7 @@ from outfit_engine import suggest_outfit
 BG, PANEL, TEXT, ACCENT, MUTED = "#111214", "#202223", "#F4F4F1", "#C9F745", "#8E9296"
 DANGER = "#FF6B6B"
 
-# Nur für die Farbfläche der Karten (Platzhalter statt Foto).
+# Farben der Kleidungsstücke, mit ihnen werden die Pixelart-Icons gefüllt.
 COLOR_HEX = {"White": "#F4F4F1", "Black": "#0B0B0C", "Grey": "#8A8D91", "Beige": "#D9C7A3",
              "Cream": "#EFE6CC", "Navy": "#1D2B4F", "Brown": "#6B4426", "Blue": "#2F6FD1",
              "Light Blue": "#8EC3EE", "Olive Green": "#6B7A2E", "Burgundy": "#7A1F36"}
@@ -60,9 +61,11 @@ QPushButton#menu::menu-indicator {{ image: none; width: 0px; }}
 QPushButton#big {{ text-align: left; padding: 22px; font-size: 16px; border-radius: 10px; }}
 QPushButton#bigaccent {{ text-align: left; padding: 22px; font-size: 16px; border-radius: 10px;
                         border: 1px solid {ACCENT}; }}
-QComboBox, QLineEdit {{ background: {PANEL}; border: 1px solid #3A3D40; border-radius: 8px; padding: 7px 10px; }}
-QComboBox QAbstractItemView {{ background: {PANEL}; selection-background-color: {ACCENT};
-                              selection-color: #111214; }}
+QLineEdit {{ background: {PANEL}; border: 1px solid #3A3D40; border-radius: 8px; padding: 7px 10px; }}
+QToolButton#tile {{ background: #17191A; border: 1px solid #2E3032; border-radius: 10px; padding: 4px;
+                   font-size: 11px; color: {TEXT}; }}
+QToolButton#tile:hover {{ border-color: #6A6E73; }}
+QToolButton#tile:checked {{ border: 2px solid {ACCENT}; background: #1E2112; }}
 QDialog {{ background: {BG}; }}
 QMenu {{ background: {PANEL}; border: 1px solid #3A3D40; }}
 QMenu::item:selected {{ background: {ACCENT}; color: #111214; }}
@@ -120,15 +123,29 @@ def scroll(widget):
     return area
 
 
-def icon_box(category, color_name=None, dim=False):
-    """Pixelart-Icon der Category in der Farbe des Teils, mittig auf dunklem Feld."""
+def icon_box(subcategory, color_name=None, dim=False, category=None):
+    """Pixelart-Icon der Subcategory in der Farbe des Teils, mittig auf dunklem Feld."""
     box = QLabel()
     box.setAlignment(Qt.AlignCenter)
-    box.setFixedHeight(84)
+    box.setFixedHeight(112)
     box.setStyleSheet("background: #17191A; border-radius: 6px; border: 1px solid #2E3032;")
-    if category in icons.SHAPES:
-        box.setPixmap(icons.pixmap(category, COLOR_HEX.get(color_name, "#8E9296"), scale=4, dim=dim))
+    box.setPixmap(icons.pixmap(subcategory, COLOR_HEX.get(color_name, "#8E9296"), scale=3,
+                               dim=dim, category=category))
     return box
+
+
+def item_tile(text, pixmap):
+    """Auswahlkachel (Icon und Name) für das Startteil."""
+    tile = QToolButton()
+    tile.setObjectName("tile")
+    tile.setCheckable(True)
+    tile.setCursor(Qt.PointingHandCursor)
+    tile.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+    tile.setIcon(QIcon(pixmap))
+    tile.setIconSize(QSize(64, 64))
+    tile.setText("\n".join(textwrap.wrap(text, 16)[:2]))
+    tile.setFixedSize(126, 118)
+    return tile
 
 
 def item_meta(item):
@@ -268,7 +285,7 @@ class ItemCard(QFrame):
         menu_btn.setMenu(menu)
         top.addWidget(menu_btn)
         lay.addLayout(top)
-        lay.addWidget(icon_box(item["Category"], item["Color"]))
+        lay.addWidget(icon_box(item["Subcategory"], item["Color"], category=item["Category"]))
         lay.addWidget(label(item["Name"], wrap=True))
         lay.addWidget(label(item_meta(item), "muted"))
         lay.addWidget(label(f"{' / '.join(item['Occasion'])} · {', '.join(item['Season'])}", "muted", wrap=True))
@@ -281,13 +298,13 @@ def slot_card(slot, item):
     lay = QVBoxLayout(card)
     lay.addWidget(label(slot.upper(), "muted"))
     if item is None:
-        lay.addWidget(icon_box(slot, dim=True))
+        lay.addWidget(icon_box(None, dim=True, category=slot))
         lay.addWidget(label("No suitable item", "muted", wrap=True))
     elif item.get("deleted"):
-        lay.addWidget(icon_box(slot, dim=True))
+        lay.addWidget(icon_box(None, dim=True, category=slot))
         lay.addWidget(label(f"{item['Name']} ({item['Clothing_ID']})", "danger", wrap=True))
     else:
-        lay.addWidget(icon_box(item["Category"], item["Color"]))
+        lay.addWidget(icon_box(item["Subcategory"], item["Color"], category=item["Category"]))
         lay.addWidget(label(item["Name"], wrap=True))
         lay.addWidget(label(item_meta(item), "muted"))
     lay.addStretch()
@@ -315,6 +332,7 @@ class MainWindow(QWidget):
         self.saved = so.load_saved()
         self.filter = "All"
         self.seen, self.current = [], None
+        self.anchor_id, self.anchor_filter = None, "All"
 
         root = QVBoxLayout(self)
         root.setContentsMargins(24, 16, 24, 16)
@@ -418,9 +436,30 @@ class MainWindow(QWidget):
         form = QFrame()
         form.setObjectName("card")
         fl = QVBoxLayout(form)
-        fl.addWidget(label("Starting item", "muted"))
-        self.anchor_box = QComboBox()
-        fl.addWidget(self.anchor_box)
+        anchor_head = QHBoxLayout()
+        anchor_head.addWidget(label("Starting item", "muted"))
+        self.anchor_label = label("", "accent")
+        anchor_head.addWidget(self.anchor_label)
+        anchor_head.addStretch()
+        fl.addLayout(anchor_head)
+        anchor_chips = QHBoxLayout()
+        group = QButtonGroup(self)
+        for name in ["All"] + wd.CATEGORIES:
+            b = chip(name)
+            b.setChecked(name == "All")
+            b.clicked.connect(lambda _=False, n=name: self.set_anchor_filter(n))
+            group.addButton(b)
+            anchor_chips.addWidget(b)
+        anchor_chips.addStretch()
+        self.anchor_chips = group
+        fl.addLayout(anchor_chips)
+        tiles_host = Host()
+        self.tiles = QGridLayout(tiles_host)
+        self.tiles.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+        self.tiles.setSpacing(8)
+        self.tiles_area = scroll(tiles_host)
+        self.tiles_area.setFixedHeight(262)
+        fl.addWidget(self.tiles_area)
         fl.addWidget(label("Season", "muted"))
         self.season_group, self.season_row = self._choice(fl, wd.SEASONS, "Autumn")
         fl.addWidget(label("Occasion", "muted"))
@@ -484,14 +523,47 @@ class MainWindow(QWidget):
             self.grid.setRowStretch(r, 0)
         self.grid.setRowStretch(rows, 1)  # überschüssiger Platz nach unten, Karten bleiben kompakt
 
+    TILE_COLUMNS = 8
+
     def refresh_anchor_box(self, select_id=None):
-        keep = select_id or self.anchor_box.currentData()
-        self.anchor_box.clear()
-        self.anchor_box.addItem("No starting item", None)
-        for item in sorted(self.wardrobe, key=lambda i: (wd.CATEGORIES.index(i["Category"]), i["Name"])):
-            self.anchor_box.addItem(f"{item['Category']} · {item['Name']} ({item['Clothing_ID']})", item["Clothing_ID"])
-        index = self.anchor_box.findData(keep)
-        self.anchor_box.setCurrentIndex(max(index, 0))
+        """Baut die Kacheln für das Startteil neu auf (gefiltert nach Category)."""
+        if select_id is not None:
+            self.anchor_id = select_id
+        if not any(i["Clothing_ID"] == self.anchor_id for i in self.wardrobe):
+            self.anchor_id = None
+        clear(self.tiles)
+        self.selected_tile = None
+        self.tile_group = QButtonGroup(self)
+        none_tile = item_tile("No starting item", icons.logo_pixmap(4))
+        none_tile.setChecked(self.anchor_id is None)
+        none_tile.clicked.connect(lambda: self.select_anchor(None))
+        self.tile_group.addButton(none_tile)
+        self.tiles.addWidget(none_tile, 0, 0)
+        items = sorted((i for i in self.wardrobe if self.anchor_filter in ("All", i["Category"])),
+                       key=lambda i: (wd.CATEGORIES.index(i["Category"]), i["Name"]))
+        for n, item in enumerate(items, start=1):
+            tile = item_tile(item["Name"], icons.pixmap(item["Subcategory"], COLOR_HEX.get(item["Color"], MUTED),
+                                                        scale=2, category=item["Category"]))
+            tile.setToolTip(f"{item['Name']} ({item['Clothing_ID']})\n{item_meta(item)}")
+            tile.setChecked(item["Clothing_ID"] == self.anchor_id)
+            if tile.isChecked():
+                self.selected_tile = tile
+            tile.clicked.connect(lambda _=False, cid=item["Clothing_ID"]: self.select_anchor(cid))
+            self.tile_group.addButton(tile)
+            self.tiles.addWidget(tile, n // self.TILE_COLUMNS, n % self.TILE_COLUMNS)
+        self._update_anchor_label()
+
+    def set_anchor_filter(self, name):
+        self.anchor_filter = name
+        self.refresh_anchor_box()
+
+    def select_anchor(self, clothing_id):
+        self.anchor_id = clothing_id
+        self._update_anchor_label()
+
+    def _update_anchor_label(self):
+        item = next((i for i in self.wardrobe if i["Clothing_ID"] == self.anchor_id), None)
+        self.anchor_label.setText(f"·  {item['Name']} ({item['Clothing_ID']})" if item else "·  none")
 
     def refresh_saved(self):
         clear(self.saved_box)
@@ -560,8 +632,13 @@ class MainWindow(QWidget):
             self.refresh_all()
 
     def outfit_from(self, item):
+        self.anchor_filter = item["Category"]
+        for b in self.anchor_chips.buttons():
+            b.setChecked(b.text() == item["Category"])
         self.refresh_anchor_box(select_id=item["Clothing_ID"])
         self.go(2)
+        if self.selected_tile:
+            self.tiles_area.ensureWidgetVisible(self.selected_tile)
 
     # Aktionen: Outfits -----------------------------------------------------------------
 
@@ -572,7 +649,7 @@ class MainWindow(QWidget):
         if new:
             self.seen = []
         season, occasion = self._selected(self.season_group), self._selected(self.occasion_group)
-        anchor = self.anchor_box.currentData()
+        anchor = self.anchor_id
         clear(self.result_box)
         try:
             outfit = suggest_outfit(self.wardrobe, anchor, season, occasion,
@@ -588,7 +665,8 @@ class MainWindow(QWidget):
     def _show_outfit(self, outfit, season, occasion):
         box = self.result_box
         box.addWidget(label("Your Outfit", "h2"))
-        box.addLayout(tag_row(occasion, season, *(["Edgy"] if outfit.edgy else [])))
+        box.addLayout(tag_row(occasion, season, *(["Edgy"] if outfit.edgy else []),
+                              *(["Suit"] if outfit.suit else [])))
         cards = QHBoxLayout()
         for slot, item in outfit.slots.items():
             cards.addWidget(slot_card(slot, item))
@@ -596,8 +674,6 @@ class MainWindow(QWidget):
         name = "Edginess" if outfit.edgy else "Compatibility"
         box.addWidget(label(f"{name} {outfit.score:.0f}/100   (season {outfit.season:.2f}, "
                             f"occasion {outfit.occasion:.2f}, color {outfit.color:.2f})", "muted"))
-        for w in outfit.warnings:
-            box.addWidget(label(w, "danger"))
         self.status = label("", "accent")
         buttons = QHBoxLayout()
         save = button("Save outfit", "primary")
