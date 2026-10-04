@@ -674,5 +674,158 @@
       "Autumn",
       "Winter"
     ]
+  },
+  {
+    "Clothing_ID": "C046",
+    "Name": "White Ankle Socks",
+    "Color": "White",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Ankle Socks",
+    "Season": [
+      "Spring",
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C047",
+    "Name": "Black Ankle Socks",
+    "Color": "Black",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Ankle Socks",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C048",
+    "Name": "Navy Ankle Socks",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Ankle Socks",
+    "Season": [
+      "Spring",
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C049",
+    "Name": "White Crew Socks",
+    "Color": "White",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Crew Socks",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C050",
+    "Name": "Black Crew Socks",
+    "Color": "Black",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Crew Socks",
+    "Season": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C051",
+    "Name": "Navy Crew Socks",
+    "Color": "Navy",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Crew Socks",
+    "Season": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C052",
+    "Name": "Burgundy Crew Socks",
+    "Color": "Burgundy",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Crew Socks",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C053",
+    "Name": "Grey Wool Socks",
+    "Color": "Grey",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Wool Socks",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C054",
+    "Name": "Brown Wool Socks",
+    "Color": "Brown",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Wool Socks",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C055",
+    "Name": "Olive Green Wool Socks",
+    "Color": "Olive Green",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Wool Socks",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
   }
 ]
