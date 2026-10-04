@@ -8,10 +8,59 @@ Clothing_ID, Name, Color, Occasion (Liste), Category, Subcategory, Season (Liste
 
 import json
 import os
+import shutil
+import sys
 import tempfile
 from pathlib import Path
 
-DEFAULT_PATH = Path(__file__).with_name("clothing_curator_dataset.json")
+DATASET_NAME = "clothing_curator_dataset.json"
+APP_NAME = "Klamottenkurator"
+
+
+def _is_frozen():
+    """True, wenn das Programm als .exe (PyInstaller) läuft."""
+    return bool(getattr(sys, "frozen", False))
+
+
+def bundled_dir():
+    """Ordner mit den mitgelieferten, nur lesbaren Dateien (Datenbasis)."""
+    if _is_frozen():
+        return Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+    return Path(__file__).parent
+
+
+def data_dir():
+    """Ordner mit den veränderbaren Nutzerdaten (Kleiderschrank, gespeicherte Outfits).
+
+    Als .exe: der Ordner Klamottenkurator in %APPDATA%, damit jeder Nutzer seinen eigenen Schrank hat und
+    Daten Neustarts und neue Programmversionen überleben (NFR3). Entwicklung: der Projektordner.
+    Mit der Umgebungsvariable KLAMOTTENKURATOR_DATA lässt sich der Ordner überschreiben.
+    """
+    override = os.environ.get("KLAMOTTENKURATOR_DATA")
+    if override:
+        return Path(override)
+    if _is_frozen():
+        base = os.environ.get("APPDATA") or Path.home()
+        return Path(base) / APP_NAME
+    return Path(__file__).parent
+
+
+DEFAULT_PATH = data_dir() / DATASET_NAME
+
+
+def ensure_user_data(path=DEFAULT_PATH):
+    """Legt beim ersten Start den Nutzerordner an und kopiert die mitgelieferte Datenbasis hinein.
+
+    Eine vorhandene Datei wird nie überschrieben. Fehlt auch die mitgelieferte Datei, passiert nichts
+    (load_wardrobe meldet dann 'file not found').
+    """
+    path = Path(path)
+    if path.exists():
+        return
+    seed = bundled_dir() / DATASET_NAME
+    if seed.exists() and seed.resolve() != path.resolve():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(seed, path)
 
 SEASONS = ["Spring", "Summer", "Autumn", "Winter"]
 OCCASIONS = ["Casual", "Formal", "Sport"]
@@ -78,6 +127,8 @@ def load_wardrobe(path=DEFAULT_PATH):
     Wirft ClothingDataError bei fehlender Datei, kaputtem JSON oder ungültigen Einträgen.
     """
     path = Path(path)
+    if path == DEFAULT_PATH:
+        ensure_user_data(path)
     try:
         with open(path, encoding="utf-8") as f:
             items = json.load(f)
