@@ -1,7 +1,7 @@
 """Datenschicht des Klamotten Kurators.
 
 Enthält die erlaubten Werte (für Validierung und GUI-Buttons) sowie Laden,
-Speichern und Hinzufügen von Kleidungsstücken in der JSON-Flatfile.
+Speichern, Hinzufügen, Ändern und Löschen von Kleidungsstücken in der JSON-Flatfile.
 Ein Kleidungsstück ist ein dict mit den Feldern
 Clothing_ID, Name, Color, Occasion (Liste), Category, Subcategory, Season (Liste).
 """
@@ -146,3 +146,57 @@ def add_item(items, category, subcategory, color, occasions, seasons, name=None,
             items.pop()  # Speicher und Datei sollen nicht auseinanderlaufen
             raise
     return item
+
+
+def _find_index(items, clothing_id):
+    for index, item in enumerate(items):
+        if item["Clothing_ID"] == clothing_id:
+            return index
+    raise ValueError(f"Unknown Clothing_ID '{clothing_id}'.")
+
+
+def update_item(items, clothing_id, *, name=None, category=None, subcategory=None, color=None,
+                occasions=None, seasons=None, path=DEFAULT_PATH):
+    """Ändert Felder eines Kleidungsstücks und speichert die Datei (path=None: nur im Speicher).
+
+    Nur die übergebenen Felder werden geändert, die Clothing_ID bleibt gleich.
+    Ungültige Werte werfen ClothingDataError, dann bleibt alles unverändert.
+    Gibt das geänderte Item zurück. Wirft ValueError bei unbekannter ID.
+    """
+    index = _find_index(items, clothing_id)
+    old = items[index]
+    new = dict(old)
+    for key, value in (("Name", name), ("Category", category), ("Subcategory", subcategory),
+                       ("Color", color)):
+        if value is not None:
+            new[key] = value
+    if occasions is not None:
+        new["Occasion"] = list(occasions)
+    if seasons is not None:
+        new["Season"] = [s for s in SEASONS if s in seasons]  # feste Reihenfolge
+    _validate_item(new, index + 1, {i["Clothing_ID"] for i in items} - {clothing_id})
+    items[index] = new
+    if path is not None:
+        try:
+            save_wardrobe(items, path)
+        except BaseException:
+            items[index] = old  # Speicher und Datei sollen nicht auseinanderlaufen
+            raise
+    return new
+
+
+def delete_item(items, clothing_id, path=DEFAULT_PATH):
+    """Löscht ein Kleidungsstück und speichert die Datei (path=None: nur im Speicher).
+
+    Die IDs der übrigen Teile bleiben unverändert. Gibt das gelöschte Item zurück.
+    Wirft ValueError bei unbekannter ID.
+    """
+    index = _find_index(items, clothing_id)
+    removed = items.pop(index)
+    if path is not None:
+        try:
+            save_wardrobe(items, path)
+        except BaseException:
+            items.insert(index, removed)
+            raise
+    return removed
