@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (QApplication, QButtonGroup, QComboBox, QDialog, Q
                                QMessageBox, QPushButton, QScrollArea, QStackedWidget,
                                QVBoxLayout, QWidget)
 
+import icons
 import saved_outfits as so
 import wardrobe as wd
 from outfit_engine import suggest_outfit
@@ -119,10 +120,14 @@ def scroll(widget):
     return area
 
 
-def swatch(color_name):
-    box = QFrame()
-    box.setFixedHeight(52)
-    box.setStyleSheet(f"background: {COLOR_HEX.get(color_name, PANEL)}; border-radius: 6px; border: 1px solid #3A3D40;")
+def icon_box(category, color_name=None, dim=False):
+    """Pixelart-Icon der Category in der Farbe des Teils, mittig auf dunklem Feld."""
+    box = QLabel()
+    box.setAlignment(Qt.AlignCenter)
+    box.setFixedHeight(84)
+    box.setStyleSheet("background: #17191A; border-radius: 6px; border: 1px solid #2E3032;")
+    if category in icons.SHAPES:
+        box.setPixmap(icons.pixmap(category, COLOR_HEX.get(color_name, "#8E9296"), scale=4, dim=dim))
     return box
 
 
@@ -263,7 +268,7 @@ class ItemCard(QFrame):
         menu_btn.setMenu(menu)
         top.addWidget(menu_btn)
         lay.addLayout(top)
-        lay.addWidget(swatch(item["Color"]))
+        lay.addWidget(icon_box(item["Category"], item["Color"]))
         lay.addWidget(label(item["Name"], wrap=True))
         lay.addWidget(label(item_meta(item), "muted"))
         lay.addWidget(label(f"{' / '.join(item['Occasion'])} · {', '.join(item['Season'])}", "muted", wrap=True))
@@ -276,13 +281,13 @@ def slot_card(slot, item):
     lay = QVBoxLayout(card)
     lay.addWidget(label(slot.upper(), "muted"))
     if item is None:
-        lay.addWidget(swatch(None))
+        lay.addWidget(icon_box(slot, dim=True))
         lay.addWidget(label("No suitable item", "muted", wrap=True))
     elif item.get("deleted"):
-        lay.addWidget(swatch(None))
+        lay.addWidget(icon_box(slot, dim=True))
         lay.addWidget(label(f"{item['Name']} ({item['Clothing_ID']})", "danger", wrap=True))
     else:
-        lay.addWidget(swatch(item["Color"]))
+        lay.addWidget(icon_box(item["Category"], item["Color"]))
         lay.addWidget(label(item["Name"], wrap=True))
         lay.addWidget(label(item_meta(item), "muted"))
     lay.addStretch()
@@ -326,6 +331,9 @@ class MainWindow(QWidget):
 
     def _header(self):
         row = QHBoxLayout()
+        logo = QLabel()
+        logo.setPixmap(icons.logo_pixmap(2))
+        row.addWidget(logo)
         row.addWidget(label("KLAMOTTEN\nKURATOR", "logo"))
         row.addSpacing(30)
         self.nav = []
@@ -628,6 +636,7 @@ def main():
     app = QApplication(sys.argv)
     app.setFont(QFont("Bahnschrift", 10))
     app.setStyleSheet(STYLE)
+    app.setWindowIcon(icons.app_icon())
     try:
         window = MainWindow()
     except (wd.ClothingDataError, OSError) as e:
