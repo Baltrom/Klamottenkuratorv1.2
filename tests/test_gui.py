@@ -53,4 +53,6 @@ def test_edgy_and_anchor(window):
     w.create_outfit(new=True)
     assert w.current[0].edgy
     w.outfit_from(w.wardrobe[0])
-    assert w.anchor_box.currentData() == w.wardrobe[0]["Clothing_ID"]
+    assert w.anchor_id == w.wardrobe[0]["Clothing_ID"]
+    w.select_anchor(None)
+    assert w.anchor_id is None
