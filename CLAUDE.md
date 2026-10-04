@@ -26,7 +26,11 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - `outfit_engine.py`: `suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude=(), rng=None)` (`anchor_id=None`: ohne Ausgangsteil) gibt ein `Outfit` zurück (`slots`, `score`, `format()`). Kommandozeilen-Test: `py outfit_engine.py Autumn Casual --anchor C016`, ohne Ausgangsteil `py outfit_engine.py Winter Formal`, mit `--edgy` invers.
 - `clothing_curator_dataset.json`: die aktuelle Datenbasis.
 - `kleiderschrank.json` (alter Entwurf) wurde entfernt.
-- **Noch nicht vorhanden:** die GUI (das Mockup steht aus) und die `.exe`.
+- `saved_outfits.py`: gespeicherte Outfits ("Save outfit"): `save_outfit`, `delete_saved`, `load_saved`, `resolve_outfit`. Es werden nur IDs gespeichert; ein später gelöschtes Teil erscheint als "(deleted)", das Outfit bleibt erhalten.
+- `gui.py`: PySide6-Oberfläche nach dem Mockup (dunkel, Lime-Akzent `#C9F745`, Systemschrift Bahnschrift/Segoe UI, keine Bilder, Englisch). Seiten Home, My Wardrobe (6 Category-Filter, Karten mit Menü Edit / Build outfit from this item / Delete, Add-Dialog per Buttons) und Outfits (Starting item, Season, Occasion, Edgy, Create outfit, Save outfit, Another combination, Liste Saved outfits). Start: `py gui.py`.
+- `tests/`: pytest (`py -m pytest`), Kern und GUI-Rauchtest (offscreen).
+- **Noch nicht vorhanden:** die `.exe`.
+- **Nutzerdaten:** Als `.exe` liegen Kleiderschrank und `saved_outfits.json` in `%APPDATA%\Klamottenkurator` (jeder Nutzer hat seinen eigenen Schrank, kein Export). Beim ersten Start wird die mitgelieferte Datenbasis kopiert. In der Entwicklung liegt alles im Projektordner (`saved_outfits.json` ist in `.gitignore`). `KLAMOTTENKURATOR_DATA` überschreibt den Ordner.
 
 ## Entschiedene Funktionen
 - **Outfit ohne Ausgangsteil (in der Engine umgesetzt):** Der Nutzer wählt nur Season und Occasion, die Engine wählt selbst alle Teile.
@@ -47,7 +51,8 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - Socken sind ergänzt (C046-C055). Bei neuen Season/Occasion-Kombinationen ohne Socken bleibt die Zeile leer.
 - Im Sommer gibt es nie eine Jacke, weil keine Jacke die Season "Summer" hat. Das ist gewollt.
 - Die harten Filter und die Farbwerte sind von mir vorgeschlagen und vom Team noch nicht ausdrücklich bestätigt.
-- Es gibt noch keine automatischen Tests, geprüft wurde per Skript auf einer Kopie der Daten.
+- Tests sind knapp (Kern und GUI-Rauchtest). Die GUI wurde mit Screenshots geprüft, nicht mit simulierten Klicks im echten Fenster.
+- Die Mockup-Punkte "Fotos", Benutzer-Icon und "Stile" wurden bewusst weggelassen (Stile → "3 occasions").
 - Optionale Anforderungen (OF1 Temperatur, OF2 Wäschewarnung, OF3 Kalendereintrag) sind nicht begonnen.
 
 ## Anforderungen aus der Projektbeschreibung
@@ -60,6 +65,6 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 Remote: `https://github.com/Baltrom/Klamottenkuratorv1.2` (Branch `main`). Änderungen laufen über Feature-Branches und Pull Requests (GitHub-CLI `gh`, Anmeldung mit `gh auth login`). Unter Windows ist `gh` nach der Installation erst nach einem Neustart des Terminals im PATH.
 
 ## Nächste Schritte
-1. Mockup der GUI ansehen, dann die GUI mit PySide6 bauen (Auswahl: Teil oder "ohne Teil", Season, Occasion; Edgy-Schalter; Ausgabe: Outfit-Text; Button "anderes Outfit"; Formular zum Hinzufügen, Bearbeiten und Löschen per Buttons).
-2. `.exe` mit PyInstaller bauen (`pip install PySide6 pyinstaller`).
-3. Automatische Tests (pytest) für `wardrobe.py` und `outfit_engine.py`.
+1. `.exe` mit PyInstaller bauen und auf einem zweiten Rechner testen (Windows-SmartScreen-Warnung bei unsignierter `.exe` ist normal).
+2. GUI im echten Fenster durchklicken (Add/Edit/Delete) und Feedback von Tom und Leo einholen.
+3. FR6 (Style-Ergänzungen für den Schrank vorschlagen) und optionale Anforderungen OF1 bis OF3.
