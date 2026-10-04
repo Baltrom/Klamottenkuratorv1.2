@@ -6,7 +6,7 @@ Die App schlägt aus dem eigenen digitalen Kleiderschrank ein Outfit vor. Arbeit
 ## Festgelegte Rahmenbedingungen
 - Python (unter Windows über `py` starten, `python` ist der Store-Alias), Entwicklung in VS Code.
 - Datenbank: JSON-Flatfile `clothing_curator_dataset.json` (55 Teile inkl. 10 Socken, Liste von Objekten).
-- GUI: **PySide6** (`pip install PySide6`), rein textbasiert, keine Bilder. **Alle Begriffe und Optionen in der GUI sind Englisch**, abgeleitet von den Attributnamen der JSON.
+- GUI: **PySide6** (`pip install PySide6`), keine Fotos, Bilder nur als Pixelart-Icons aus `icons.py` (im Code gezeichnet, keine Bilddateien). **Alle Begriffe und Optionen in der GUI sind Englisch**, abgeleitet von den Attributnamen der JSON.
 - Es wird immer nur **ein** Outfit angezeigt, dazu ein Button "anderes Outfit".
 - Die App soll Kleidungsstücke über einfache Buttons hinzufügen können, z. B. Pants → Blue → Casual/Formal → Summer/Spring.
 
@@ -27,7 +27,8 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - `clothing_curator_dataset.json`: die aktuelle Datenbasis.
 - `kleiderschrank.json` (alter Entwurf) wurde entfernt.
 - `saved_outfits.py`: gespeicherte Outfits ("Save outfit"): `save_outfit`, `delete_saved`, `load_saved`, `resolve_outfit`. Es werden nur IDs gespeichert; ein später gelöschtes Teil erscheint als "(deleted)", das Outfit bleibt erhalten.
-- `gui.py`: PySide6-Oberfläche nach dem Mockup (dunkel, Lime-Akzent `#C9F745`, Systemschrift Bahnschrift/Segoe UI, keine Bilder, Englisch). Seiten Home, My Wardrobe (6 Category-Filter, Karten mit Menü Edit / Build outfit from this item / Delete, Add-Dialog per Buttons) und Outfits (Starting item, Season, Occasion, Edgy, Create outfit, Save outfit, Another combination, Liste Saved outfits). Start: `py gui.py`.
+- `gui.py`: PySide6-Oberfläche nach dem Mockup (dunkel, Lime-Akzent `#C9F745`, Systemschrift Bahnschrift/Segoe UI, keine Fotos, Englisch). Seiten Home, My Wardrobe (6 Category-Filter, Karten mit Pixelart-Icon und Menü Edit / Build outfit from this item / Delete, Add-Dialog per Buttons) und Outfits (Starting item, Season, Occasion, Edgy, Create outfit, Save outfit, Another combination, Liste Saved outfits). Start: `py gui.py`.
+- `icons.py`: Pixelart-Icons (16x16, hochskaliert ohne Weichzeichnen) für die 6 Categories und das Logo (Kleiderbügel). Die Silhouette wird mit der Farbe des Teils gefüllt, Umriss, Licht und Schatten entstehen automatisch. Leere Slots und gelöschte Teile zeigen das Icon blass. `py icons.py` schreibt `assets/klamottenkurator.ico` (wird vom Build erzeugt, `assets/` ist in `.gitignore`).
 - `tests/`: pytest (`py -m pytest`), Kern und GUI-Rauchtest (offscreen).
 - `build_exe.bat`: baut `dist\Klamottenkurator.exe` (PyInstaller, eine Datei, kein Python zum Starten nötig; ca. 45 MB, `dist/` und `build/` sind in `.gitignore`). Voraussetzung: `py -m pip install PySide6 pyinstaller`. Start getestet: legt beim ersten Start die Nutzerdaten an.
 - **Nutzerdaten:** Als `.exe` liegen Kleiderschrank und `saved_outfits.json` in `%APPDATA%\Klamottenkurator` (jeder Nutzer hat seinen eigenen Schrank, kein Export). Beim ersten Start wird die mitgelieferte Datenbasis kopiert. In der Entwicklung liegt alles im Projektordner (`saved_outfits.json` ist in `.gitignore`). `KLAMOTTENKURATOR_DATA` überschreibt den Ordner.
