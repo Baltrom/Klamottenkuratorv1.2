@@ -5,7 +5,7 @@ Die App schlägt aus dem eigenen digitalen Kleiderschrank ein Outfit vor. Arbeit
 
 ## Festgelegte Rahmenbedingungen
 - Python (unter Windows über `py` starten, `python` ist der Store-Alias), Entwicklung in VS Code.
-- Datenbank: JSON-Flatfile `clothing_curator_dataset.json` (57 Teile inkl. 10 Socken und 2 Suit Jackets, Liste von Objekten).
+- Datenbank: JSON-Flatfile `clothing_curator_dataset.json` (58 Teile inkl. 10 Socken, 2 Suit Jackets und Black/Navy Trousers für Anzüge, Liste von Objekten).
 - GUI: **PySide6** (`pip install PySide6`), keine Fotos, Bilder nur als Pixelart-Icons aus `icons.py` (im Code gezeichnet, keine Bilddateien). **Alle Begriffe und Optionen in der GUI sind Englisch**, abgeleitet von den Attributnamen der JSON.
 - Es wird immer nur **ein** Outfit angezeigt, dazu ein Button "anderes Outfit".
 - Die App soll Kleidungsstücke über einfache Buttons hinzufügen können, z. B. Pants → Blue → Casual/Formal → Summer/Spring.
@@ -52,7 +52,7 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 ## Bekannte Lücken und offene Punkte
 - Socken sind ergänzt (C046-C055). Bei neuen Season/Occasion-Kombinationen ohne Socken bleibt die Zeile leer.
 - Im Sommer gibt es bei Casual/Sport keine Jacke, weil keine solche Jacke die Season "Summer" hat. Das ist gewollt. Ausnahme: Suit Jackets (Formal) gibt es in allen Seasons (Teamentscheidung).
-- Es gibt nur Black Trousers. Der Anzug-Bonus greift deshalb nur beim Black Suit Jacket und nicht im Sommer (Black Trousers haben kein Summer).
+- Black und Navy Trousers gibt es in allen Seasons, passend zu den Suit Jackets. Der Anzug-Bonus (+5) bevorzugt den Anzug, erzwingt ihn aber nicht: Wegen der 3-Punkte-Toleranz kommt in ca. 20 % der Fälle eine andere Hose (z. B. Beige Chinos).
 - Die harten Filter und die Farbwerte sind von mir vorgeschlagen und vom Team noch nicht ausdrücklich bestätigt.
 - Tests sind knapp (Kern und GUI-Rauchtest). Die GUI wurde mit Screenshots geprüft, nicht mit simulierten Klicks im echten Fenster.
 - Die Mockup-Punkte "Fotos", Benutzer-Icon und "Stile" wurden bewusst weggelassen (Stile → "3 occasions").

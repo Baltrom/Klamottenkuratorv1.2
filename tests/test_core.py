@@ -105,3 +105,10 @@ def test_suit_bonus(data):
     assert outfit.slots["Bottom"]["Subcategory"] == "Trousers" and outfit.suit
     edgy = engine.suggest_outfit(items, "C056", "Autumn", "Formal", edgy=True, rng=random.Random(4))
     assert not edgy.suit
+
+
+def test_navy_suit_and_summer_suit(data):
+    items, _ = data
+    suits = [engine.suggest_outfit(items, anchor, season, "Formal", rng=random.Random(seed)).suit
+             for anchor in ("C056", "C057") for season in ("Summer", "Winter") for seed in range(10)]
+    assert sum(suits) >= len(suits) // 2  # Anzug wird klar bevorzugt

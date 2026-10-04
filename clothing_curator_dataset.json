@@ -257,6 +257,7 @@
     "Subcategory": "Trousers",
     "Season": [
       "Spring",
+      "Summer",
       "Autumn",
       "Winter"
     ]
@@ -853,6 +854,23 @@
     ],
     "Category": "Outerwear",
     "Subcategory": "Suit Jacket",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C058",
+    "Name": "Navy Trousers",
+    "Color": "Navy",
+    "Occasion": [
+      "Formal",
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Trousers",
     "Season": [
       "Spring",
       "Summer",
