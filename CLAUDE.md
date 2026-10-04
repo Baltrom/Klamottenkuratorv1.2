@@ -25,8 +25,13 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - `wardrobe.py`: Konstanten, `load_wardrobe()` mit Validierung (wirft `ClothingDataError`), `save_wardrobe()` (atomar), `next_id()`, `add_item()` (vergibt ID, validiert, speichert). **Noch offen:** Bearbeiten und Löschen (FR2).
 - `outfit_engine.py`: `suggest_outfit(wardrobe, anchor_id, season, occasion, exclude=(), rng=None)` gibt ein `Outfit` zurück (`slots`, `score`, `format()`). Kommandozeilen-Test: `py outfit_engine.py C016 Autumn Casual`.
 - `clothing_curator_dataset.json`: die aktuelle Datenbasis.
-- `kleiderschrank.json`: älterer deutscher Entwurf, wird nirgends verwendet, kann gelöscht werden.
 - **Noch nicht vorhanden:** die GUI. Das Mockup steht aus.
+- `kleiderschrank.json` (alter Entwurf) wurde entfernt.
+
+## Geplante Funktionen (vom Team entschieden)
+- **Outfit ohne Ausgangsteil:** Der Nutzer wählt nur Season und Occasion, die Engine wählt selbst alle Teile.
+- **Edgy-Modus (inverse Bewertung):** ein Schalter, der mit und ohne Ausgangsteil funktioniert. Die Bewertung wird komplett umgekehrt, die harten Filter entfallen. Sandalen im Winter sind hier ausdrücklich erlaubt. Ergebnis: die unpassendsten Teile und Farbkombinationen.
+- **Programmstart:** Desktop-App mit PySide6, verpackt als einzelne `Klamottenkurator.exe` (PyInstaller). Start per Doppelklick, ohne VS Code und ohne Python-Installation. Kein Browser-Betrieb.
 
 ## Algorithmus (Entscheidungen)
 1. **Harte Filter:** Ein Teil muss zur gewählten Season UND zur gewählten Occasion passen.
@@ -51,10 +56,11 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - NFR1: grafische Oberfläche ohne Kommandozeile. NFR2: Outfit in unter 2 s bei bis zu 500 Teilen. NFR3: Daten bleiben nach Neustart erhalten.
 
 ## Git-Stand
-Das Repository ist lokal und hat noch keinen Commit und kein Remote. Zum Teilen mit dem Team und zwischen den Rechnern wäre ein GitHub-Repository sinnvoll.
+Remote: `https://github.com/Baltrom/Klamottenkuratorv1.2` (Branch `main`). Änderungen laufen über Feature-Branches und Pull Requests (GitHub-CLI `gh`, Anmeldung mit `gh auth login`). Unter Windows ist `gh` nach der Installation erst nach einem Neustart des Terminals im PATH.
 
 ## Nächste Schritte
-1. Mockup der GUI ansehen, dann die GUI mit PySide6 bauen (Auswahl: Teil, Season, Occasion; Ausgabe: Outfit-Text; Button "anderes Outfit"; Formular zum Hinzufügen per Buttons).
-2. Socken in die Daten aufnehmen.
-3. Bearbeiten und Löschen in `wardrobe.py` ergänzen.
-4. Erster Commit und gemeinsames Repository.
+1. Socken in die Daten aufnehmen.
+2. Bearbeiten und Löschen in `wardrobe.py` ergänzen.
+3. Outfit ohne Ausgangsteil und Edgy-Modus in `outfit_engine.py`.
+4. Mockup der GUI ansehen, dann die GUI mit PySide6 bauen (Auswahl: Teil, Season, Occasion; Edgy-Schalter; Ausgabe: Outfit-Text; Button "anderes Outfit"; Formular zum Hinzufügen per Buttons).
+5. `.exe` mit PyInstaller bauen.
