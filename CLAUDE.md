@@ -29,7 +29,7 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - `saved_outfits.py`: gespeicherte Outfits ("Save outfit"): `save_outfit`, `delete_saved`, `load_saved`, `resolve_outfit`. Es werden nur IDs gespeichert; ein später gelöschtes Teil erscheint als "(deleted)", das Outfit bleibt erhalten.
 - `gui.py`: PySide6-Oberfläche nach dem Mockup (dunkel, Lime-Akzent `#C9F745`, Systemschrift Bahnschrift/Segoe UI, keine Bilder, Englisch). Seiten Home, My Wardrobe (6 Category-Filter, Karten mit Menü Edit / Build outfit from this item / Delete, Add-Dialog per Buttons) und Outfits (Starting item, Season, Occasion, Edgy, Create outfit, Save outfit, Another combination, Liste Saved outfits). Start: `py gui.py`.
 - `tests/`: pytest (`py -m pytest`), Kern und GUI-Rauchtest (offscreen).
-- **Noch nicht vorhanden:** die `.exe`.
+- `build_exe.bat`: baut `dist\Klamottenkurator.exe` (PyInstaller, eine Datei, kein Python zum Starten nötig; ca. 45 MB, `dist/` und `build/` sind in `.gitignore`). Voraussetzung: `py -m pip install PySide6 pyinstaller`. Start getestet: legt beim ersten Start die Nutzerdaten an.
 - **Nutzerdaten:** Als `.exe` liegen Kleiderschrank und `saved_outfits.json` in `%APPDATA%\Klamottenkurator` (jeder Nutzer hat seinen eigenen Schrank, kein Export). Beim ersten Start wird die mitgelieferte Datenbasis kopiert. In der Entwicklung liegt alles im Projektordner (`saved_outfits.json` ist in `.gitignore`). `KLAMOTTENKURATOR_DATA` überschreibt den Ordner.
 
 ## Entschiedene Funktionen
@@ -65,6 +65,6 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 Remote: `https://github.com/Baltrom/Klamottenkuratorv1.2` (Branch `main`). Änderungen laufen über Feature-Branches und Pull Requests (GitHub-CLI `gh`, Anmeldung mit `gh auth login`). Unter Windows ist `gh` nach der Installation erst nach einem Neustart des Terminals im PATH.
 
 ## Nächste Schritte
-1. `.exe` mit PyInstaller bauen und auf einem zweiten Rechner testen (Windows-SmartScreen-Warnung bei unsignierter `.exe` ist normal).
+1. Die `.exe` auf einem zweiten Rechner testen und verteilen (z. B. als GitHub Release). Windows-SmartScreen warnt bei unsignierten `.exe`-Dateien ("Weitere Informationen" → "Trotzdem ausführen"), mancher Virenscanner schlägt bei PyInstaller fälschlich an.
 2. GUI im echten Fenster durchklicken (Add/Edit/Delete) und Feedback von Tom und Leo einholen.
 3. FR6 (Style-Ergänzungen für den Schrank vorschlagen) und optionale Anforderungen OF1 bis OF3.
