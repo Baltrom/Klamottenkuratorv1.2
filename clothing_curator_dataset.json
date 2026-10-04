@@ -1,0 +1,678 @@
+[
+  {
+    "Clothing_ID": "C001",
+    "Name": "White Basic T-Shirt",
+    "Color": "White",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "T-Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C002",
+    "Name": "Black Basic T-Shirt",
+    "Color": "Black",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "T-Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C003",
+    "Name": "Navy T-Shirt",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "T-Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C004",
+    "Name": "Olive Green T-Shirt",
+    "Color": "Olive Green",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "T-Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C005",
+    "Name": "Burgundy T-Shirt",
+    "Color": "Burgundy",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "T-Shirt",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C006",
+    "Name": "White Polo Shirt",
+    "Color": "White",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Polo Shirt",
+    "Season": [
+      "Spring",
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C007",
+    "Name": "Navy Polo Shirt",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Polo Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C008",
+    "Name": "White Tank Top",
+    "Color": "White",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Tank Top",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C009",
+    "Name": "Grey Long Sleeve Top",
+    "Color": "Grey",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Long Sleeve Top",
+    "Season": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C010",
+    "Name": "Black Long Sleeve Top",
+    "Color": "Black",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Long Sleeve Top",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C011",
+    "Name": "Light Blue Oxford Shirt",
+    "Color": "Light Blue",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C012",
+    "Name": "White Oxford Shirt",
+    "Color": "White",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C013",
+    "Name": "Navy Casual Shirt",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C014",
+    "Name": "Beige Casual Shirt",
+    "Color": "Beige",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C015",
+    "Name": "Black Dress Shirt",
+    "Color": "Black",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C016",
+    "Name": "Dark Blue Jeans",
+    "Color": "Blue",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Jeans",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C017",
+    "Name": "Black Trousers",
+    "Color": "Black",
+    "Occasion": [
+      "Formal",
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Trousers",
+    "Season": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C018",
+    "Name": "Beige Chinos",
+    "Color": "Beige",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Chinos",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C019",
+    "Name": "Olive Cargo Pants",
+    "Color": "Olive Green",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Cargo Pants",
+    "Season": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C020",
+    "Name": "Grey Sweatpants",
+    "Color": "Grey",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Sweatpants",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C021",
+    "Name": "Beige Chino Shorts",
+    "Color": "Beige",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Shorts",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C022",
+    "Name": "Black Athletic Shorts",
+    "Color": "Black",
+    "Occasion": [
+      "Sport",
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Athletic Shorts",
+    "Season": [
+      "Spring",
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C023",
+    "Name": "Navy Shorts",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Shorts",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C024",
+    "Name": "Olive Cargo Shorts",
+    "Color": "Olive Green",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Shorts",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C025",
+    "Name": "Light Blue Denim Shorts",
+    "Color": "Light Blue",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Shorts",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C026",
+    "Name": "Black Baseball Cap",
+    "Color": "Black",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Baseball Cap",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C027",
+    "Name": "Beige Baseball Cap",
+    "Color": "Beige",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Baseball Cap",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C028",
+    "Name": "Grey Beanie",
+    "Color": "Grey",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Beanie",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C029",
+    "Name": "Navy Beanie",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Beanie",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C030",
+    "Name": "Olive Green Bucket Hat",
+    "Color": "Olive Green",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Bucket Hat",
+    "Season": [
+      "Spring",
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C031",
+    "Name": "Black Bomber Jacket",
+    "Color": "Black",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Bomber Jacket",
+    "Season": [
+      "Spring",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C032",
+    "Name": "Blue Denim Jacket",
+    "Color": "Blue",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Denim Jacket",
+    "Season": [
+      "Spring",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C033",
+    "Name": "Beige Jacket",
+    "Color": "Beige",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Jacket",
+    "Season": [
+      "Spring",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C034",
+    "Name": "Navy Rain Jacket",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Rain Jacket",
+    "Season": [
+      "Spring",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C035",
+    "Name": "Olive Green Parka",
+    "Color": "Olive Green",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Parka",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C036",
+    "Name": "Grey Hoodie",
+    "Color": "Grey",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Hoodie",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C037",
+    "Name": "Black Hoodie",
+    "Color": "Black",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Hoodie",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C038",
+    "Name": "Navy Sweater",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Sweater",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C039",
+    "Name": "Cream Sweater",
+    "Color": "Cream",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Sweater",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C040",
+    "Name": "Burgundy Sweater",
+    "Color": "Burgundy",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "Sweater",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C041",
+    "Name": "White Sneakers",
+    "Color": "White",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Sneakers",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C042",
+    "Name": "Black Sneakers",
+    "Color": "Black",
+    "Occasion": [
+      "Casual",
+      "Sport"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Sneakers",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C043",
+    "Name": "Black Running Shoes",
+    "Color": "Black",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Running Shoes",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C044",
+    "Name": "Brown Boots",
+    "Color": "Brown",
+    "Occasion": [
+      "Casual",
+      "Formal"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Boots",
+    "Season": [
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C045",
+    "Name": "Black Loafers",
+    "Color": "Black",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Loafers",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  }
+]
