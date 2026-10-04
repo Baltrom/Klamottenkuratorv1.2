@@ -665,7 +665,8 @@ class MainWindow(QWidget):
     def _show_outfit(self, outfit, season, occasion):
         box = self.result_box
         box.addWidget(label("Your Outfit", "h2"))
-        box.addLayout(tag_row(occasion, season, *(["Edgy"] if outfit.edgy else [])))
+        box.addLayout(tag_row(occasion, season, *(["Edgy"] if outfit.edgy else []),
+                              *(["Suit"] if outfit.suit else [])))
         cards = QHBoxLayout()
         for slot, item in outfit.slots.items():
             cards.addWidget(slot_card(slot, item))

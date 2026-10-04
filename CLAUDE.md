@@ -5,7 +5,7 @@ Die App schlägt aus dem eigenen digitalen Kleiderschrank ein Outfit vor. Arbeit
 
 ## Festgelegte Rahmenbedingungen
 - Python (unter Windows über `py` starten, `python` ist der Store-Alias), Entwicklung in VS Code.
-- Datenbank: JSON-Flatfile `clothing_curator_dataset.json` (55 Teile inkl. 10 Socken, Liste von Objekten).
+- Datenbank: JSON-Flatfile `clothing_curator_dataset.json` (57 Teile inkl. 10 Socken und 2 Suit Jackets, Liste von Objekten).
 - GUI: **PySide6** (`pip install PySide6`), keine Fotos, Bilder nur als Pixelart-Icons aus `icons.py` (im Code gezeichnet, keine Bilddateien). **Alle Begriffe und Optionen in der GUI sind Englisch**, abgeleitet von den Attributnamen der JSON.
 - Es wird immer nur **ein** Outfit angezeigt, dazu ein Button "anderes Outfit".
 - Die App soll Kleidungsstücke über einfache Buttons hinzufügen können, z. B. Pants → Blue → Casual/Formal → Summer/Spring.
@@ -28,7 +28,7 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - `kleiderschrank.json` (alter Entwurf) wurde entfernt.
 - `saved_outfits.py`: gespeicherte Outfits ("Save outfit"): `save_outfit`, `delete_saved`, `load_saved`, `resolve_outfit`. Es werden nur IDs gespeichert; ein später gelöschtes Teil erscheint als "(deleted)", das Outfit bleibt erhalten.
 - `gui.py`: PySide6-Oberfläche nach dem Mockup (dunkel, Lime-Akzent `#C9F745`, Systemschrift Bahnschrift/Segoe UI, keine Fotos, Englisch). Seiten Home, My Wardrobe (6 Category-Filter, Karten mit Pixelart-Icon und Menü Edit / Build outfit from this item / Delete, Add-Dialog per Buttons) und Outfits (Starting item als Icon-Kacheln mit Category-Filter, Season, Occasion, Edgy, Create outfit, Save outfit, Another combination, Liste Saved outfits). Start: `py gui.py`.
-- `icons.py`: Pixelart-Icons, ein Icon pro Subcategory (29), 32x32, ohne Umriss, hochskaliert ohne Weichzeichnen (Karten 3x = 96 px, Auswahlkacheln 2x). Jedes Icon ist ein Zeichenraster (Legende im Modul); Flächen werden automatisch schattiert und an den Ecken gerundet, die Hauptfläche bekommt eine Stoffstruktur je Subcategory (denim, knit, fleece, gloss, quilt, mesh, ripstop, stripes, rib). Gefüllt wird mit der Farbe des Teils, Kordeln/Metall/Sohlen haben feste Farben. Unbekannte Subcategory → Standard-Icon der Category. Leere Slots und gelöschte Teile zeigen das Icon blass. Logo: Kleiderbügel. `py icons.py` schreibt `assets/klamottenkurator.ico` (wird vom Build erzeugt, `assets/` ist in `.gitignore`).
+- `icons.py`: Pixelart-Icons, ein Icon pro Subcategory (30), 32x32, ohne Umriss (nur Farben mit Kontrast < 2.0 zur Kachel, z. B. Black, Navy, Burgundy, bekommen einen hellen 1-Pixel-Umriss), hochskaliert ohne Weichzeichnen (Karten 3x = 96 px, Auswahlkacheln 2x). Jedes Icon ist ein Zeichenraster (Legende im Modul); Flächen werden automatisch schattiert und an den Ecken gerundet, die Hauptfläche bekommt eine Stoffstruktur je Subcategory (denim, knit, fleece, gloss, quilt, mesh, ripstop, stripes, rib). Gefüllt wird mit der Farbe des Teils, Kordeln/Metall/Sohlen haben feste Farben. Unbekannte Subcategory → Standard-Icon der Category. Leere Slots und gelöschte Teile zeigen das Icon blass. Logo: Kleiderbügel. `py icons.py` schreibt `assets/klamottenkurator.ico` (wird vom Build erzeugt, `assets/` ist in `.gitignore`).
 - `tests/`: pytest (`py -m pytest`), Kern und GUI-Rauchtest (offscreen).
 - `build_exe.bat`: baut `dist\Klamottenkurator.exe` (PyInstaller, eine Datei, kein Python zum Starten nötig; ca. 45 MB, `dist/` und `build/` sind in `.gitignore`). Voraussetzung: `py -m pip install PySide6 pyinstaller`. Start getestet: legt beim ersten Start die Nutzerdaten an.
 - **Nutzerdaten:** Als `.exe` liegen Kleiderschrank und `saved_outfits.json` in `%APPDATA%\Klamottenkurator` (jeder Nutzer hat seinen eigenen Schrank, kein Export). Beim ersten Start wird die mitgelieferte Datenbasis kopiert. In der Entwicklung liegt alles im Projektordner (`saved_outfits.json` ist in `.gitignore`). `KLAMOTTENKURATOR_DATA` überschreibt den Ordner.
@@ -47,10 +47,12 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 6. **Gleichstand:** Outfits innerhalb von 3 Punkten zum Besten gelten als gleich gut, dann entscheidet der Zufall. `exclude` mit `Outfit.key` ermöglicht "anderes Outfit". Auch bei der Vorauswahl der Kandidaten entscheidet bei gleicher Bewertung der Zufall.
 7. **Das Ausgangsteil gilt immer als gesetzt**, auch wenn es nicht zu Season/Occasion passt (Teamentscheidung). Es gibt dafür keinen Hinweis; die übrigen Teile werden passend zu Season und Occasion drumherum gebaut.
 8. **Edgy:** Jeder Teilwert (Season, Occasion, Farbe) wird zu `1 - Wert`, der Score ist die gleiche Gewichtung davon. Die Ausgabe heißt `Edginess` statt `Score`, das Feld `Outfit.edgy` ist `True`.
+9. **Anzug-Bonus:** Suit Jacket (Outerwear) und Trousers (Bottom) in derselben Farbe ergeben +5 Punkte (max. 100) und `Outfit.suit = True`, die GUI zeigt den Tag "Suit". Im Edgy-Modus kostet ein Anzug 5 Punkte.
 
 ## Bekannte Lücken und offene Punkte
 - Socken sind ergänzt (C046-C055). Bei neuen Season/Occasion-Kombinationen ohne Socken bleibt die Zeile leer.
-- Im Sommer gibt es nie eine Jacke, weil keine Jacke die Season "Summer" hat. Das ist gewollt.
+- Im Sommer gibt es bei Casual/Sport keine Jacke, weil keine solche Jacke die Season "Summer" hat. Das ist gewollt. Ausnahme: Suit Jackets (Formal) gibt es in allen Seasons (Teamentscheidung).
+- Es gibt nur Black Trousers. Der Anzug-Bonus greift deshalb nur beim Black Suit Jacket und nicht im Sommer (Black Trousers haben kein Summer).
 - Die harten Filter und die Farbwerte sind von mir vorgeschlagen und vom Team noch nicht ausdrücklich bestätigt.
 - Tests sind knapp (Kern und GUI-Rauchtest). Die GUI wurde mit Screenshots geprüft, nicht mit simulierten Klicks im echten Fenster.
 - Die Mockup-Punkte "Fotos", Benutzer-Icon und "Stile" wurden bewusst weggelassen (Stile → "3 occasions").

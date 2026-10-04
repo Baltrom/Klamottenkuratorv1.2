@@ -96,3 +96,12 @@ def test_anchor_is_always_used_without_warning(data):
     assert not hasattr(outfit, "warnings")
     others = [i for s, i in outfit.slots.items() if i and s != "Top"]
     assert others and all("Winter" in i["Season"] and "Formal" in i["Occasion"] for i in others)
+
+
+def test_suit_bonus(data):
+    items, _ = data
+    outfit = engine.suggest_outfit(items, "C056", "Autumn", "Formal", rng=random.Random(4))
+    assert outfit.slots["Outerwear"]["Clothing_ID"] == "C056"
+    assert outfit.slots["Bottom"]["Subcategory"] == "Trousers" and outfit.suit
+    edgy = engine.suggest_outfit(items, "C056", "Autumn", "Formal", edgy=True, rng=random.Random(4))
+    assert not edgy.suit

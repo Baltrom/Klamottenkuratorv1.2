@@ -36,3 +36,9 @@ def test_icon_fits_and_uses_known_symbols(name):
 
 def test_logo_grid_is_square():
     assert len(icons.LOGO) == 16 and all(len(row) == 16 for row in icons.LOGO)
+
+
+def test_outline_only_for_low_contrast():
+    assert icons.needs_outline("#0B0B0C")       # Black
+    assert not icons.needs_outline("#F4F4F1")   # White
+    assert not icons.needs_outline("#2F6FD1")   # Blue

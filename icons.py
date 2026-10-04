@@ -1,6 +1,7 @@
 """Pixelart-Icons des Klamotten Kurators, im Code gezeichnet (keine Bilddateien).
 
-Ein Icon pro Subcategory, 32x32 Pixel, ohne Umriss. Jedes Icon ist ein Zeichenraster:
+Ein Icon pro Subcategory, 32x32 Pixel, ohne Umriss. Nur sehr dunkle Farben, die sich kaum von der
+dunklen Kachel abheben (z. B. Black, Burgundy), bekommen einen hellen 1-Pixel-Umriss. Jedes Icon ist ein Zeichenraster:
 Flächen ('#', '+', '%') werden automatisch schattiert (Licht von links oben, jede Fläche
 wirkt leicht gepolstert), '#' bekommt zusätzlich die Stoffstruktur des Icons (Denim, Strick, ...).
 Gefüllt wird mit der Farbe des Kleidungsstücks, Details wie Kordeln, Metall und Sohlen haben
@@ -19,6 +20,8 @@ from PySide6.QtGui import QColor, QIcon, QImage, QPixmap
 
 SIZE = 32
 ACCENT, BG = "#C9F745", "#111214"
+TILE = "#17191A"           # Hintergrund der Icon-Felder in der GUI
+MIN_CONTRAST = 2.0         # darunter bekommt das Icon einen Umriss
 PANELS = "#+%"
 FIXED = {"s": "#F1EEE6", "S": "#C4BFB2", "m": "#DADEE2", "n": "#868C93", "g": "#E2AC4E",
          "w": "#F2F1EC", "W": "#C9C7BE", "k": "#2E3034", "K": "#4C4F55", "b": "#6E4A2E",
@@ -643,6 +646,30 @@ ICONS = {
         ".....##########n",
         "......#########n",
     ], "texture": "quilt", "stamps": [(10, 9, ["m"]), (21, 9, ["m"])]},
+    "Suit Jacket": {"half": [
+        ".......#####ssss",
+        ".....######+sssk",
+        "...#######++sssk",
+        "..###x####+++ssk",
+        ".####x#####+++sk",
+        "#####x######++sk",
+        "#####x######++sk",
+        "#####x#######+sk",
+        "#####x#######+sk",
+        "#####x########+k",
+        "#####x#########m",
+        "#####x#########x",
+        "#####x#########x",
+        "#####x#########m",
+        "#####x#########x",
+        "#####x#xxxxx###x",
+        "#####x#+++++###x",
+        "#####x#########x",
+        "#####x#########x",
+        "#m#m#x########x.",
+        "......#######x..",
+        "......######x...",
+    ], "stamps": [(8, 6, ["s s"]), (7, 7, ["xxxxx"])]},
     # --- Headwear ------------------------------------------------------------------------
     "Baseball Cap": {"half": [
         "...............m",
@@ -867,6 +894,20 @@ def ramp(fill):
             4: _mix(base, "#FFFFFF", 0.20), 5: _mix(base, "#FFFFFF", 0.48)}
 
 
+def _luminance(color):
+    def lin(v):
+        v /= 255
+        return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+    c = QColor(color)
+    return 0.2126 * lin(c.red()) + 0.7152 * lin(c.green()) + 0.0722 * lin(c.blue())
+
+
+def needs_outline(fill):
+    """True, wenn die Grundfarbe des Icons zu wenig Kontrast zur Kachel hat (WCAG-Kontrastverhältnis)."""
+    a, b = _luminance(ramp(fill)[3]), _luminance(TILE)
+    return (max(a, b) + 0.05) / (min(a, b) + 0.05) < MIN_CONTRAST
+
+
 def resolve(subcategory, category=None):
     """Name des Icons: die Subcategory, sonst das Standard-Icon der Category."""
     if subcategory in ICONS:
@@ -880,7 +921,8 @@ def render(subcategory, fill="#8E9296", dim=False, category=None):
     colors = ramp(DIM_BASE if dim else fill)
     image = QImage(SIZE, SIZE, QImage.Format_ARGB32)
     image.fill(Qt.transparent)
-    for y, row in enumerate(shades(name)):
+    cells = shades(name)
+    for y, row in enumerate(cells):
         for x, v in enumerate(row):
             if v is None:
                 continue
@@ -888,6 +930,14 @@ def render(subcategory, fill="#8E9296", dim=False, category=None):
             if dim and not isinstance(v, int):
                 color = _mix(color, DIM_BASE, 0.75)
             image.setPixelColor(x, y, color)
+    if not dim and needs_outline(fill):
+        line = _mix(colors[3], "#C4C8CC", 0.55)
+        for y in range(SIZE):
+            for x in range(SIZE):
+                if cells[y][x] is None and any(0 <= x + dx < SIZE and 0 <= y + dy < SIZE
+                                               and cells[y + dy][x + dx] is not None
+                                               for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                    image.setPixelColor(x, y, line)
     return image
 
 

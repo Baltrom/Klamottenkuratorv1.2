@@ -31,7 +31,7 @@ def window(tmp_path, monkeypatch):
 def test_first_start_copies_dataset_and_shows_items(window, tmp_path):
     w, _ = window
     assert (tmp_path / "clothing_curator_dataset.json").exists()
-    assert len(w.wardrobe) == 55
+    assert len(w.wardrobe) == 57
 
 
 def test_create_save_and_delete_outfit(window, tmp_path):

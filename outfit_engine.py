@@ -24,6 +24,7 @@ from wardrobe import (COLOR_HUES, NEUTRAL_COLORS, OCCASIONS, SEASONS,
 
 SLOTS = ["Footwear", "Socks", "Bottom", "Top", "Outerwear"]
 WEIGHTS = {"season": 50, "occasion": 30, "color": 20}
+SUIT_BONUS = 5         # Suit Jacket + Trousers in derselben Farbe ergeben einen Anzug
 
 TOP_PER_SLOT = 8       # nur die besten Kandidaten je Slot werden kombiniert (Performance)
 TOP_PER_SLOT_NO_ANCHOR = 6   # ohne Ausgangsteil sind es mehr Slots mit freier Wahl
@@ -90,6 +91,7 @@ class Outfit:
     occasion: float
     color: float
     edgy: bool = False          # True: Teilwerte und Score sind invertiert (je höher, desto unpassender)
+    suit: bool = False          # True: Suit Jacket und Trousers in derselben Farbe (Anzug)
 
     @property
     def key(self):
@@ -104,8 +106,16 @@ class Outfit:
             lines.append(f"{slot:<10} {text}")
         label = "Edginess" if self.edgy else "Score"
         lines.append(f"{label:<10} {self.score:.0f}/100  "
-                     f"(season {self.season:.2f}, occasion {self.occasion:.2f}, color {self.color:.2f})")
+                     f"(season {self.season:.2f}, occasion {self.occasion:.2f}, color {self.color:.2f})"
+                     + ("  suit" if self.suit else ""))
         return "\n".join(lines)
+
+
+def is_suit(chosen):
+    """True, wenn Suit Jacket und Trousers dieselbe Farbe haben (ein Anzug)."""
+    jacket, bottom = chosen.get("Outerwear"), chosen.get("Bottom")
+    return bool(jacket and bottom and jacket["Subcategory"] == "Suit Jacket"
+                and bottom["Subcategory"] == "Trousers" and jacket["Color"] == bottom["Color"])
 
 
 def _score_outfit(slots, chosen, season, occasion, edgy=False):
@@ -116,7 +126,10 @@ def _score_outfit(slots, chosen, season, occasion, edgy=False):
     if edgy:
         s, o, c = 1 - s, 1 - o, 1 - c
     score = WEIGHTS["season"] * s + WEIGHTS["occasion"] * o + WEIGHTS["color"] * c
-    return Outfit({slot: chosen.get(slot) for slot in slots}, score, s, o, c, edgy=edgy)
+    suit = is_suit(chosen)
+    if suit:  # Bonus für einen Anzug; im Edgy-Modus ist ein Anzug "zu passend" und kostet Punkte
+        score = max(0.0, min(100.0, score + (-SUIT_BONUS if edgy else SUIT_BONUS)))
+    return Outfit({slot: chosen.get(slot) for slot in slots}, score, s, o, c, edgy=edgy, suit=suit)
 
 
 def _candidates(wardrobe, slot, anchor, season, occasion, edgy, rng, limit):

@@ -71,7 +71,7 @@ SUBCATEGORIES = {
     "Bottom": ["Jeans", "Trousers", "Chinos", "Cargo Pants", "Sweatpants", "Shorts", "Athletic Shorts"],
     "Footwear": ["Sneakers", "Running Shoes", "Boots", "Loafers"],
     "Socks": ["Ankle Socks", "Crew Socks", "Wool Socks"],
-    "Outerwear": ["Bomber Jacket", "Denim Jacket", "Jacket", "Rain Jacket", "Parka"],
+    "Outerwear": ["Bomber Jacket", "Denim Jacket", "Jacket", "Rain Jacket", "Parka", "Suit Jacket"],
     "Headwear": ["Baseball Cap", "Beanie", "Bucket Hat"],
 }
 CATEGORIES = list(SUBCATEGORIES)

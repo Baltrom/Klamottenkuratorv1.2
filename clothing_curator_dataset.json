@@ -827,5 +827,37 @@
       "Autumn",
       "Winter"
     ]
+  },
+  {
+    "Clothing_ID": "C056",
+    "Name": "Black Suit Jacket",
+    "Color": "Black",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Suit Jacket",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C057",
+    "Name": "Navy Suit Jacket",
+    "Color": "Navy",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Suit Jacket",
+    "Season": [
+      "Spring",
+      "Summer",
+      "Autumn",
+      "Winter"
+    ]
   }
 ]
