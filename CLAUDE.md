@@ -23,7 +23,7 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 
 ## Stand der Dateien
 - `wardrobe.py`: Konstanten, `load_wardrobe()` mit Validierung (wirft `ClothingDataError`), `save_wardrobe()` (atomar), `next_id()`, `add_item()` (vergibt ID, validiert, speichert). **Noch offen:** Bearbeiten und Löschen (FR2).
-- `outfit_engine.py`: `suggest_outfit(wardrobe, anchor_id, season, occasion, exclude=(), rng=None)` gibt ein `Outfit` zurück (`slots`, `score`, `format()`). Kommandozeilen-Test: `py outfit_engine.py C016 Autumn Casual`.
+- `outfit_engine.py`: `suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude=(), rng=None)` (`anchor_id=None`: ohne Ausgangsteil) gibt ein `Outfit` zurück (`slots`, `score`, `format()`). Kommandozeilen-Test: `py outfit_engine.py Autumn Casual --anchor C016`, ohne Ausgangsteil `py outfit_engine.py Winter Formal`, mit `--edgy` invers.
 - `clothing_curator_dataset.json`: die aktuelle Datenbasis.
 - `kleiderschrank.json`: älterer deutscher Entwurf, wird nirgends verwendet, kann gelöscht werden.
 - **Noch nicht vorhanden:** die GUI. Das Mockup steht aus.
