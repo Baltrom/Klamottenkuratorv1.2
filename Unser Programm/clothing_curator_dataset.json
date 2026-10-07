@@ -1,0 +1,522 @@
+[
+  {
+    "Clothing_ID": "C1001",
+    "Name": "White T-Shirt · Demo 01",
+    "Color": "White",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "T-Shirt",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1002",
+    "Name": "Beige Chinos · Demo 01",
+    "Color": "Beige",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Chinos",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1003",
+    "Name": "White Sneakers · Demo 01",
+    "Color": "White",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Sneakers",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1004",
+    "Name": "Blue Denim Jacket · Demo 01",
+    "Color": "Blue",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Denim Jacket",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1005",
+    "Name": "Navy Polo Shirt · Demo 02",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "Polo Shirt",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1006",
+    "Name": "Beige Shorts · Demo 02",
+    "Color": "Beige",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Shorts",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1007",
+    "Name": "White Sneakers · Demo 02",
+    "Color": "White",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Sneakers",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1008",
+    "Name": "Cream Bucket Hat · Demo 02",
+    "Color": "Cream",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Bucket Hat",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1009",
+    "Name": "Cream Sweater · Demo 03",
+    "Color": "Cream",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "Sweater",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1010",
+    "Name": "Blue Jeans · Demo 03",
+    "Color": "Blue",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Jeans",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1011",
+    "Name": "Brown Boots · Demo 03",
+    "Color": "Brown",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Boots",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1012",
+    "Name": "Olive Green Bomber Jacket · Demo 03",
+    "Color": "Olive Green",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Bomber Jacket",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1013",
+    "Name": "Grey Hoodie · Demo 04",
+    "Color": "Grey",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Top",
+    "Subcategory": "Hoodie",
+    "Season": [
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C1014",
+    "Name": "Black Jeans · Demo 04",
+    "Color": "Black",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Jeans",
+    "Season": [
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C1015",
+    "Name": "Brown Boots · Demo 04",
+    "Color": "Brown",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Boots",
+    "Season": [
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C1016",
+    "Name": "Navy Parka · Demo 04",
+    "Color": "Navy",
+    "Occasion": [
+      "Casual"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Parka",
+    "Season": [
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C1017",
+    "Name": "Light Blue Shirt · Demo 05",
+    "Color": "Light Blue",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1018",
+    "Name": "Navy Trousers · Demo 05",
+    "Color": "Navy",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Trousers",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1019",
+    "Name": "Brown Loafers · Demo 05",
+    "Color": "Brown",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Loafers",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1020",
+    "Name": "Beige Jacket · Demo 05",
+    "Color": "Beige",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Jacket",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1021",
+    "Name": "White Shirt · Demo 06",
+    "Color": "White",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1022",
+    "Name": "Grey Trousers · Demo 06",
+    "Color": "Grey",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Trousers",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1023",
+    "Name": "Black Loafers · Demo 06",
+    "Color": "Black",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Loafers",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1024",
+    "Name": "Black Ankle Socks · Demo 06",
+    "Color": "Black",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Socks",
+    "Subcategory": "Ankle Socks",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1025",
+    "Name": "Burgundy Shirt · Demo 07",
+    "Color": "Burgundy",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Top",
+    "Subcategory": "Shirt",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1026",
+    "Name": "Black Trousers · Demo 07",
+    "Color": "Black",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Trousers",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1027",
+    "Name": "Black Loafers · Demo 07",
+    "Color": "Black",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Loafers",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1028",
+    "Name": "Grey Jacket · Demo 07",
+    "Color": "Grey",
+    "Occasion": [
+      "Formal"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Jacket",
+    "Season": [
+      "Autumn"
+    ]
+  },
+  {
+    "Clothing_ID": "C1029",
+    "Name": "Light Blue Long Sleeve Top · Demo 08",
+    "Color": "Light Blue",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Long Sleeve Top",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1030",
+    "Name": "Navy Sweatpants · Demo 08",
+    "Color": "Navy",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Sweatpants",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1031",
+    "Name": "Grey Running Shoes · Demo 08",
+    "Color": "Grey",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Running Shoes",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1032",
+    "Name": "Blue Rain Jacket · Demo 08",
+    "Color": "Blue",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Outerwear",
+    "Subcategory": "Rain Jacket",
+    "Season": [
+      "Spring"
+    ]
+  },
+  {
+    "Clothing_ID": "C1033",
+    "Name": "Black Tank Top · Demo 09",
+    "Color": "Black",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Tank Top",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1034",
+    "Name": "Grey Athletic Shorts · Demo 09",
+    "Color": "Grey",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Athletic Shorts",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1035",
+    "Name": "White Running Shoes · Demo 09",
+    "Color": "White",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Running Shoes",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1036",
+    "Name": "Blue Baseball Cap · Demo 09",
+    "Color": "Blue",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Baseball Cap",
+    "Season": [
+      "Summer"
+    ]
+  },
+  {
+    "Clothing_ID": "C1037",
+    "Name": "Grey Sweater · Demo 10",
+    "Color": "Grey",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Top",
+    "Subcategory": "Sweater",
+    "Season": [
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C1038",
+    "Name": "Black Sweatpants · Demo 10",
+    "Color": "Black",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Bottom",
+    "Subcategory": "Sweatpants",
+    "Season": [
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C1039",
+    "Name": "Black Running Shoes · Demo 10",
+    "Color": "Black",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Footwear",
+    "Subcategory": "Running Shoes",
+    "Season": [
+      "Winter"
+    ]
+  },
+  {
+    "Clothing_ID": "C1040",
+    "Name": "Navy Beanie · Demo 10",
+    "Color": "Navy",
+    "Occasion": [
+      "Sport"
+    ],
+    "Category": "Headwear",
+    "Subcategory": "Beanie",
+    "Season": [
+      "Winter"
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+QWidget { background: #F7F6F2; color: #191919; font-family: 'DejaVu Sans', 'Arial'; font-size: 14px; }
+QLabel { background: transparent; }
+QLabel#brand { font-size: 18px; letter-spacing: 2px; }
+QLabel#hero { font-family: 'Georgia', 'DejaVu Serif'; font-size: 44px; }
+QLabel#title { font-family: 'Georgia', 'DejaVu Serif'; font-size: 32px; }
+QLabel#subtitle { color: #6B6B67; font-size: 17px; }
+QLabel#muted { color: #6B6B67; font-size: 12px; }
+QLabel#eyebrow { color: #6B6B67; font-size: 11px; letter-spacing: 2px; }
+QLabel#itemTitle { font-size: 17px; }
+QPushButton { background: #FFFFFF; border: 1px solid #D9D8D3; border-radius: 5px; padding: 13px 18px; text-align: left; }
+QPushButton:hover { background: #EEEDE8; border-color: #8C8B81; }
+QPushButton:focus { border: 2px solid #6B6E52; }
+QPushButton:disabled { color: #999990; background: #E7E6E0; }
+QPushButton#primary { background: #6B6E52; color: white; border-color: #6B6E52; }
+QPushButton#primary:hover { background: #54573F; }
+QPushButton#primary:disabled { background: #B1B29F; border-color: #B1B29F; }
+QPushButton#nav { background: transparent; border: none; padding: 10px; }
+QPushButton#nav:hover { background: #EEEDE8; }
+QPushButton#action { font-family: 'Georgia', 'DejaVu Serif'; font-size: 22px; padding: 26px; min-height: 170px; }
+QPushButton#chip:checked { background: #6B6E52; color: white; }
+QFrame#card { background: #FFFFFF; border: 1px solid #D9D8D3; border-radius: 5px; }
+QComboBox { background: white; border: 1px solid #D9D8D3; border-radius: 5px; padding: 14px; min-width: 110px; }
+QScrollArea { border: none; }
