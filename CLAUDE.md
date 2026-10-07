@@ -14,16 +14,16 @@ Die App schlägt aus dem eigenen digitalen Kleiderschrank ein Outfit vor. Arbeit
 `Clothing_ID` ("C001"), `Name`, `Color`, `Occasion` (Liste), `Category`, `Subcategory`, `Season` (Liste).
 - Season: Spring, Summer, Autumn, Winter.
 - Occasion: Casual, Formal, Sport.
-- Category: Top, Bottom, Footwear, Outerwear, Headwear, Socks (Socks ist vorbereitet, aber noch nicht in den Daten).
+- Category: Top, Bottom, Footwear, Outerwear, Headwear, Socks.
 - Color: White, Black, Grey, Beige, Cream, Navy, Brown, Blue, Light Blue, Olive Green, Burgundy.
 - Neue Farben müssen in `wardrobe.py` als neutral oder mit Farbton eingeordnet werden, sonst lehnt der Loader sie ab.
 
 ## Ablauf der App
-Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algorithmus liefert ein Outfit mit den Slots Footwear, Socks, Bottom, Top, Outerwear (bei einer Kopfbedeckung als Ausgangsteil zusätzlich Headwear). Fehlt für einen Slot ein passendes Teil, gibt es für diesen Slot keinen Vorschlag.
+Der Nutzer wählt optional ein Startteil (Icon-Kachel oder "No starting item"), dazu eine Season, eine Occasion und optional den Edgy-Schalter. Der Algorithmus liefert ein Outfit mit den Slots Footwear, Socks, Bottom, Top, Outerwear (bei einer Kopfbedeckung als Ausgangsteil zusätzlich Headwear). Fehlt für einen Slot ein passendes Teil, gibt es für diesen Slot keinen Vorschlag.
 
 ## Stand der Dateien
-- `wardrobe.py`: Konstanten, `load_wardrobe()` mit Validierung (wirft `ClothingDataError`), `save_wardrobe()` (atomar), `next_id()`, `add_item()` (vergibt ID, validiert, speichert), `update_item()` und `delete_item()` (FR2, validieren und speichern; bei Fehlern bleibt alles unverändert). Die GUI dazu fehlt noch.
-- `outfit_engine.py`: `suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude=(), rng=None)` (`anchor_id=None`: ohne Ausgangsteil) gibt ein `Outfit` zurück (`slots`, `score`, `format()`). Kommandozeilen-Test: `py outfit_engine.py Autumn Casual --anchor C016`, ohne Ausgangsteil `py outfit_engine.py Winter Formal`, mit `--edgy` invers.
+- `wardrobe.py`: Konstanten, `load_wardrobe()` mit Validierung (wirft `ClothingDataError`), `save_wardrobe()` (atomar), `next_id()`, `add_item()` (vergibt ID, validiert, speichert), `update_item()` und `delete_item()` (FR2, validieren und speichern; bei Fehlern bleibt alles unverändert). In der GUI über das Kartenmenü (Edit / Delete) erreichbar.
+- `outfit_engine.py`: `suggest_outfit(wardrobe, anchor_id, season, occasion, *, edgy=False, exclude=(), rng=None)` (`anchor_id=None`: ohne Ausgangsteil) gibt ein `Outfit` zurück (`slots`, `score`, Teilwerte `season`/`occasion`/`color`, `edgy`, `suit`, `key`, `format()`). Kommandozeilen-Test: `py outfit_engine.py Autumn Casual --anchor C016`, ohne Ausgangsteil `py outfit_engine.py Winter Formal`, mit `--edgy` invers.
 - `clothing_curator_dataset.json`: die aktuelle Datenbasis.
 - `kleiderschrank.json` (alter Entwurf) wurde entfernt.
 - `saved_outfits.py`: gespeicherte Outfits ("Save outfit"): `save_outfit`, `delete_saved`, `load_saved`, `resolve_outfit`. Es werden nur IDs gespeichert; ein später gelöschtes Teil erscheint als "(deleted)", das Outfit bleibt erhalten.
@@ -36,7 +36,7 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 ## Entschiedene Funktionen
 - **Outfit ohne Ausgangsteil (in der Engine umgesetzt):** Der Nutzer wählt nur Season und Occasion, die Engine wählt selbst alle Teile.
 - **Edgy-Modus (in der Engine umgesetzt, inverse Bewertung):** ein Schalter, der mit und ohne Ausgangsteil funktioniert. Die Bewertung wird komplett umgekehrt, die harten Filter entfallen. Sandalen im Winter sind hier ausdrücklich erlaubt. Ergebnis: die unpassendsten Teile und Farbkombinationen.
-- **Programmstart (geplant):** Desktop-App mit PySide6, verpackt als einzelne `Klamottenkurator.exe` (PyInstaller). Start per Doppelklick, ohne VS Code und ohne Python-Installation. Kein Browser-Betrieb.
+- **Programmstart (umgesetzt):** Desktop-App mit PySide6, verpackt als einzelne `Klamottenkurator.exe` (PyInstaller). Start per Doppelklick, ohne VS Code und ohne Python-Installation. Kein Browser-Betrieb. Verteilt als GitHub Release (v1.0.0, v1.1.0, v1.1.1 = Latest). Linux/macOS starten aus dem Quellcode (siehe `README.md`).
 
 ## Algorithmus (Entscheidungen)
 1. **Harte Filter:** Ein Teil muss zur gewählten Season UND zur gewählten Occasion passen. Im Edgy-Modus entfallen die Filter.
@@ -65,9 +65,28 @@ Der Nutzer wählt ein Kleidungsstück, eine Season und eine Occasion. Der Algori
 - NFR1: grafische Oberfläche ohne Kommandozeile. NFR2: Outfit in unter 2 s bei bis zu 500 Teilen. NFR3: Daten bleiben nach Neustart erhalten.
 
 ## Git-Stand
-Remote: `https://github.com/Baltrom/Klamottenkuratorv1.2` (Branch `main`). Änderungen laufen über Feature-Branches und Pull Requests (GitHub-CLI `gh`, Anmeldung mit `gh auth login`). Unter Windows ist `gh` nach der Installation erst nach einem Neustart des Terminals im PATH.
+Remote: `https://github.com/Baltrom/Klamottenkuratorv1.2` (Branch `main`). Änderungen laufen über Feature-Branches und Pull Requests (GitHub-CLI `gh`, Anmeldung mit `gh auth login`). Unter Windows ist `gh` nach der Installation erst nach einem Neustart des Terminals im PATH (sonst `"C:\Program Files\GitHub CLI\gh.exe"`). Das Repository ist öffentlich.
+
+**Release-Ablauf:** PR mergen → auf `main` `py -m pytest` (muss grün sein) → `build_exe.bat` → `.exe` einmal mit leerem Datenordner starten (legt Nutzerdaten an) → `gh release create vX.Y.Z dist/Klamottenkurator.exe --target main` mit Release-Notizen (Neuerungen, SmartScreen-Hinweis, Hinweis dass bestehende Nutzerdaten nicht überschrieben werden, Link aufs README).
+
+## Weiterarbeiten auf einem anderen Rechner
+1. Python 3.12, Git und GitHub-CLI installieren, `gh auth login` (GitHub.com, HTTPS, Login im Browser).
+2. `git clone https://github.com/Baltrom/Klamottenkuratorv1.2.git`
+3. `py -m pip install PySide6 pyinstaller pytest`
+4. Im Repo `git config user.name "Nikolaus Koch"` und `git config user.email "nikolaus.koch@proton.me"` setzen (sonst scheitert der erste Commit).
+5. Claude Code im Ordner `Klamottenkuratorv1.2` starten; diese Datei wird automatisch gelesen. Der Chatverlauf früherer Sessions kommt nicht mit, nur diese Datei.
+
+## GUI des Kollegen (in Arbeit)
+Ein Teammitglied hat eine eigene PySide6-GUI, erstellt mit ChatGPT Pro. Sie liegt noch nicht auf GitHub. Ziel: sie ins Repo holen und an unsere Module anbinden.
+- **Ablage:** eigener Branch `feature/gui-kollege` (nicht `main`), eigener Unterordner `gui_kollege/`, keine Änderungen an unseren Dateien, keine eigene Kopie der Datenbank. Nicht hochladen: `venv/`/`.venv/`, `__pycache__/`, `.idea/`, `.vscode/`, eigene Testdaten. `.ui`-Dateien (Qt Designer) gehören dazu. Danach Pull Request (gern als Draft). Ohne Git geht es auch im Browser: Branch anlegen → "Add file" → "Upload files" → Pull Request.
+- **Vorher:** Kollegen unter Settings → Collaborators einladen.
+- **Im PR angeben:** Startdatei, `.ui`-Dateien oder reiner Code, Python- und PySide6-Version, ob die GUI eigene Daten lädt, ein bis zwei Screenshots.
+- **Prüfen beim Review** (KI-generierter Code): eigener Algorithmus oder eigenes Datenformat statt unserer Module, abweichende Feldnamen (müssen exakt unserem Datenformat entsprechen), deutsche Begriffe in der GUI (Vorgabe: Englisch), feste Pfade, zusätzliche Abhängigkeiten, Funktionen ohne echte Logik (Platzhalter).
+- **Anbindung:** Die GUI ruft nur unsere Module auf: `wardrobe.py` (Laden, `add_item`, `update_item`, `delete_item`), `outfit_engine.suggest_outfit` (Startteil oder `None`, Season, Occasion, `edgy`, `exclude` für "anderes Outfit"), `saved_outfits.py` (Speichern), optional `icons.py`. Die Regeln oben (Algorithmus, Startteil gilt immer, Anzug-Bonus) bleiben unverändert.
+- **Offen, vom Team zu entscheiden:** welche GUI die Haupt-GUI wird (die des Kollegen oder `gui.py`), oder ob sein Layout mit unseren Funktionen kombiniert wird. Erst nach Ansicht des Codes entscheiden; dann auch `build_exe.bat` und `tests/test_gui.py` anpassen.
 
 ## Nächste Schritte
-1. Die `.exe` auf einem zweiten Rechner testen und verteilen (z. B. als GitHub Release). Windows-SmartScreen warnt bei unsignierten `.exe`-Dateien ("Weitere Informationen" → "Trotzdem ausführen"), mancher Virenscanner schlägt bei PyInstaller fälschlich an.
-2. GUI im echten Fenster durchklicken (Add/Edit/Delete) und Feedback von Tom und Leo einholen.
-3. FR6 (Style-Ergänzungen für den Schrank vorschlagen) und optionale Anforderungen OF1 bis OF3.
+1. GUI des Kollegen auf GitHub bringen (siehe oben), prüfen und anbinden.
+2. Die `.exe` auf einem zweiten Rechner testen. Windows-SmartScreen warnt bei unsignierten `.exe`-Dateien ("Weitere Informationen" → "Trotzdem ausführen"), mancher Virenscanner schlägt bei PyInstaller fälschlich an.
+3. GUI im echten Fenster durchklicken (Add/Edit/Delete) und Feedback von Tom und Leo einholen.
+4. FR6 (Style-Ergänzungen für den Schrank vorschlagen) und optionale Anforderungen OF1 bis OF3.
